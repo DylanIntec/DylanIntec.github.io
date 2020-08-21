@@ -9,7 +9,7 @@ Open on an iPhone to see it smash though the waves!
 <model-viewer width="auto"
     src="/models/boatWave.glb"
     ios-src="/models/boatWave.usdz"
-    style="width: 100%; height: 300px;"
+    style="width: 80%; height: 300px;"
     ar camera-controls background-color="#2CCC">
 </model-viewer>
 ## Wind Turbine
@@ -23,6 +23,6 @@ Open on an iPhone to see it smash though the waves!
 <model-viewer width="80%"
     src="/models/pictureBarossa.glb"
     ios-src="/models/BarossaPicture.usdz"
-    style="width: 80%; height: 300px;"
+    style="width: 80%; height: 300px; display: flex; justify-content: center;"
     ar camera-controls background-color="#2CCC">
 </model-viewer>
