@@ -4,7 +4,7 @@ title: Hectic try
 ---
 
 Welcome to my website.
-[AR Library](ModelLib.html)!
+[AR Library](ModelLib.md)!
 
 You can view it [here](Website.html)!
 and [here](MariusBusinessCard.html)!
