@@ -11,6 +11,13 @@ title: Model Library
 ![alt text](monkeyrock.JPG "Monkey Rock")
 *South Crack* | Monkey Rocks | WA
 
+![alt text](logride.gif "Mtb")
+*Turner Hill* | WA
+
+![alt text](NorwayMtb.gif){:width="100%"}
+*Sædalen* | Norway
+
+
 ![alt text](johnsonsknob.JPG "Johnstones Knob")
 *Great Red Pointer* | 19 sport | Organ Pipes Tasmaina
 
