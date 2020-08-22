@@ -1,14 +1,17 @@
 ---
 layout: default
-title: Hectic try
+title: Dylan Van Drunen
 ---
 
-Welcome to my website.
-[AR Library](ModelLib.md)!
+Welcome to my website. Have a look around. 
 
-You can view it [here](Website.html)!
-and [here](MariusBusinessCard.html)!
+[AR Library](ModelLib.md)
 
-<p> this is a html</p>
+[After work...](/photos/pictureLib.md)
+
+You can view it [here](Website.html)
+and [here](MariusBusinessCard.html)
+
+
 
 
