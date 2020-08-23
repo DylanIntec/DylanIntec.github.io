@@ -19,6 +19,13 @@ Open on an iPhone to see it smash though the waves!
     style="width: 80%; height: 300px;"
     ar autoplay camera-controls background-color="#2CCC">
 </model-viewer>
+## Solid Body Physics
+<model-viewer width="80%"
+    src="/models/chain.glb"
+    ios-src="/models/chain.usdz"
+    style="width: 80%; height: 300px; display: flex; justify-content: center;"
+    ar autoplay camera-controls background-color="#2CCC">
+</model-viewer>
 ## Barossa FPSO as a picture 
 <model-viewer width="80%"
     src="/models/pictureBarossa.glb"
