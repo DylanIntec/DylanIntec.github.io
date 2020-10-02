@@ -10,7 +10,7 @@ Welcome to my website. Have a look around.
 
 [AR for Consulting](_posts/2020-09-03-AR-for-consulting.md)
 
-[ORC example code](orc_md.md)
+[ORC example code](2020-10-02-or.html)
 
 
 <div style="background-image: '/photos/monkeyrock.JPG';"> this is the im</div>
@@ -19,9 +19,6 @@ Welcome to my website. Have a look around.
     licenses/by-nc-nd/3.0/)
 
 [After work...](/photos/pictureLib.md)
-
-You can view it [here](Website.html)
-and [here](MariusBusinessCard.html)
 
 
 
