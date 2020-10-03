@@ -12,14 +12,10 @@ Welcome to my website. Have a look around.
 
 [ORC example code](2020-10-02-or.html)
 
-
-<div style="background-image: '/photos/monkeyrock.JPG';"> this is the im</div>
-
-[![Creative Commons License](/photos/monkeyrock.JPG)](http://creativecommons.org/
-    licenses/by-nc-nd/3.0/)
+[![Models](/photos/monkeyrock.JPG)](ModelLib.html)
 
 [After work...](/photos/pictureLib.md)
 
-
+<img src="/photos/monkeyrock.JPG" class="thumbnail" height="100" width="100" /> 
 
 
