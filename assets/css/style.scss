@@ -4,9 +4,9 @@
 @import "{{ site.theme }}";
 .thumbnail:hover {
   position:relative;
-  top:-25px;
-  left:-35px;
-  width:500px;
+  top:-5px;
+  left:-5px;
+  width:200px;
   height:auto;
   display:block;
   z-index:999;
