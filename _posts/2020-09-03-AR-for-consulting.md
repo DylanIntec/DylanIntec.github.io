@@ -45,6 +45,14 @@ Jacket structure model
 As the models can be animated, entire operations can be modelled and animated. The animation could be connected to simulation data to get realistic vessel responses in waves.
 animated crane on a boat
 
+<model-viewer width="100%"
+    src="/models/spoolLift.glb"
+    ios-src="/models/spoolLift.usdz"
+    style="width: 80%; height: 300px; display: flex; justify-content: center;"
+    ar autoplay camera-controls background-color="#2CCC">
+</model-viewer>
+
+
 ### 3. Hot Desking 
 
 Using object detection, the global coordinates in the VR space can be locked to a fixed object in space. This allows tags or infomation to be connected to desks. The tags can be connected to a database and allow for dynamic updating of the office layout.
