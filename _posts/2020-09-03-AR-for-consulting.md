@@ -13,31 +13,54 @@ permalink: 2020-09-03-AR-for-consulting.html
     ar camera-controls background-color="#2CCC">
 </model-viewer>
 
-AR is a key facet of the 4th industrial revolution along with 3D printing, AI, digital twins and cloud computing. As stated by KPMG Digital Delta Partner Piers Hogarth-Scott, [It is critical that business leaders understand these technologies and how to harness them to remain locally and globally competitive](https://home.kpmg/au/en/home/insights/2020/02/2020-fourth-industrial-revolution-benchmark.html).
+Along with 3D printing, AI, digital twins and cloud computing, AR/VR is a key facet of the 4th industrial revolution . As stated by KPMG Digital Delta Partner Piers Hogarth-Scott, [It is critical that business leaders understand these technologies and how to harness them to remain locally and globally competitive](https://home.kpmg/au/en/home/insights/2020/02/2020-fourth-industrial-revolution-benchmark.html).
 
 This article explores some of the practical use cases for AR to deliver value at a low cost.
 
-## Traditional AR
+## Traditional AR/VR
 
-When AR is mentioned, an image such as below probably comes to mind. These purpose build headsets are powerful and deliver an immersive experience. 
+When AR or VR is mentioned, an image such as below probably comes to mind. These purpose build headsets are powerful and deliver an immersive experience. This comes at a great cost with one of the headsets retailing at AU$5,599.00. Fortualntly, due to the decreasing cost of computing power, we can now experience AR right from our mobile phones. First though, some terminology needs to be cleaned up.
 
 ![alt text](images/hololens.jpeg)
 Microsoft Hololens Credit: [Microsoft](https://www.microsoft.com/en-us/hololens)
 
-AU$5,599.00
+## Terminology
 
-Types:
-AR
-XR
-VR
+As the technolgy is new, there are different terminologies that can mean the same thing. 
 
-cost, hardware requirements ect
+### Virtual Reality (VR)
+All of your surroudings are rendered. Think of putting on a headset that takes you to a different world. This requires a powerful GPU and expensive gear which is a full headset.
 
-__________________________
+### Agmented Reality (AR)
+Objects are rendered in the real world. AR takes less computing power and the gear can take the form of glasses or a phone.
 
-### 1. Design 
+#### Also known as:
+*Windows Mixed Reality* - **Microsoft** \
+*XR* - **Apple**
 
-Reviewing sctructures can be much quicker and more intuative using VR rarther than using Navisworks or similar. No specilist viewing software is required and the models are easily shared. Models can be placed on the table in a meeting room for everyone to see, scale and move around. Differennt models can be overlapped to easily display the differences between versions.
+## How to view AR models
+
+### iOS
+
+iOS has a built in AR feature called Quick Look on all phones newer than iPhone 6S. If a user opens either a usdz or reality file, the Quick Look feature will automatically be triggered. Models can then be viewed in object mode or placed in AR. The .usdz file can be created from most common mesh file types such  as .obj and .glb.
+
+### MacOS
+
+MacOS can display .usdz and .reality files, the same as iOS with no AR capability.
+
+### Andriod 
+
+Suport for AR is a bit flaky on Andriod. This is generally due to devices not having the lastest version of Android. A list of phones that support GoogleAR viewer can be found [Here](https://developers.google.com/ar/discover/supported-devices). Andorid phones display the .glb file type which when opened will trigger the GoogleAR viewer.
+
+### Windows
+
+Windows has support for .glb files built in through the 3D Viewer app. The 3D Viewer app will also show any animations in the .glb file. Windows Mixed Reality compadible harware is required to view in AR.
+
+# Uses for AR in Consulting
+Using any of the methods described above, 
+### 1. Design
+
+Reviewing sctructures can be much quicker and more intuative using VR rarther than using Navisworks or similar. No specilist viewing software is required and the models are easily shared. Models can be placed on the table in a meeting room for everyone to see, scale and move around. Different models can be overlapped to easily display the differences between versions.
 
 <model-viewer width="100%"
     src="/models/props.glb"
@@ -45,8 +68,8 @@ Reviewing sctructures can be much quicker and more intuative using VR rarther th
     style="width: 80%; height: 300px; display: flex; justify-content: center;"
     ar autoplay camera-controls background-color="#2CCC">
 </model-viewer>
-Credits: 
-[Nirav Joshi](https://grabcad.com/library/propeller-412)
+Credits: \
+[Nirav Joshi](https://grabcad.com/library/propeller-412) \
 [Kumresh](https://grabcad.com/library/propeller-423)
 
 
@@ -63,19 +86,19 @@ As the models can be animated, entire operations can be modelled and animated by
 
 ### 3. Interactive Deliverables
 
-Using Reality Composer software by Apple, AR can be made fully interactive while also simulating gravity and object interactions. This could be used to make interactive deliverables to display results of a calculation. 
+Using Reality Composer software by Apple, AR can be made fully interactive while also simulating gravity and object interactions. This could be used to make interactive deliverables to display results of a calculation. If you are on an iPhone 6S or above, click the  view in AR button on the below image for an interactie AR game.
+
+<a href="file.usdz" rel="ar">
+	<img src="file.jpg" alt="Object XYZ">
+</a>
 
 ### 4. Surveys 
-
-133 272
-
-yedqy 
 
 Using either photogrammetry or a laser scanning device, a model could be quickly built then viewed in VR in the office to help identify any anomalies or damage. The model below was created from 12 photographs and processed in [RealityCapture](https://www.capturingreality.com). The great accuracy of the mesh comes at a cost as the file size is large, originally 100Mb. This is at the limit for what phones can currently display in AR thus only the newest 2019 and 2020 phones will be able to display models this large.
 
 <model-viewer width="100%"
-    src="/models/spoolLift.glb"
-    ios-src="/models/spoolLift.usdz"
+    src="/models/statue.glb"
+    ios-src="/models/statue.usdz"
     style="width: 80%; height: 300px; display: flex; justify-content: center;"
     ar autoplay camera-controls background-color="#2CCC">
 </model-viewer>
@@ -96,21 +119,4 @@ Some office layout can be very complex and maps can be confusing. VR could provi
 
 ![alt text](images/arrows.jpg)
 
-
-
-seperate article
-
-using a  phone for vr 
-
-work flow diagram 
-
-3d model - blender - animation if required - export to glb -   convert to usdz for iphone 
-                                                            stay with glb for windows/ android - host on website using 
-
-
-
-
-FastSpring
-CGMATTER-30OFF-RKNEFX
-Capturing reality
 
