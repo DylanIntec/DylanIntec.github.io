@@ -11,3 +11,24 @@
   display:block;
   z-index:999;
 }
+
+.flex-grid {
+  display: flex;
+}
+
+.col1 {
+  flex: 0.5;
+  padding: 10px;
+}
+
+.col2 {
+  flex: 1;
+  padding: 10px;
+}
+
+
+@media (max-width: 600px) {
+  .flex-grid {
+    display: block;
+  }
+}

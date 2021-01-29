@@ -104,7 +104,9 @@ Using either photogrammetry or a laser scanning device, a model could be quickly
 </model-viewer>
 
 ### 5. Education
-With the current travel limitations due to covid and budget constraints, it may be difficult for graduates to get valuable on-site experience. An alternative to this could be a creating an AR portal 
+
+With the current travel limitations due to covid and budget constraints, it may be difficult for graduates to get valuable on-site experience. An alternative to this could be a creating an AR portal into an operations center or a model of a jacket.
+
 ### 6. Hot Desking 
 
 Using object detection, the global coordinates in the VR space can be locked to a fixed object in space. This allows tags or information to be connected to desks. The tags can be connected to a database and allow for dynamic updating of the office layout.
