@@ -28,7 +28,7 @@ permalink: index.html
 <img src="images/Intecsea.png"/>
 </div>
 <div class="col2">
-<h3>Naval Architect</h3>
+<h3>Floating Systems Engineer</h3>
 <h3>2019 to current</h3>
 <p>Performed hydrodynamic analysis on a variety of floating and subsea structures.</p>
 <p>Used Python on a daily basis to facilitate the processing and visualization of the large amount of data from response based analysis. Created pre- and post-processing functions/classes for a variety of engineering software, then integrated the functions into a custom Python module to automate and streamline analysis.</p>
@@ -38,7 +38,7 @@ permalink: index.html
 <h2><a href="https://www.austal.com">Austal Ships</a></h2>
 <div class="flex-grid">
 <div class="col1">
-<img src="images/austal.svg"/>
+<img src="images/austal.png"/>
 </div>
 <div class="col2">
 <h3>Naval Architect</h3>
