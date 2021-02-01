@@ -8,7 +8,7 @@ permalink: index.html
 
 <div class="flex-grid">
 <div class="col1">
-<a href="2020-10-02-or.html"><img src="/images/Code.png" class="thumbnail" height="100" width="150" /></a>
+<a href="/projects.html"><img src="/images/Code.png" class="thumbnail" height="100" width="150" /></a>
 </div>
 <div class="col1">
 <a href="ModelLib.html"><img src="/images/Models.png" class="thumbnail" height="100" width="150" /></a>
