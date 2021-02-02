@@ -136,7 +136,7 @@ strong {
 img {
   position: relative;
   margin: 0 auto;
-  max-width: 739px;
+  max-width: 640px;
   padding: 5px;
   margin: 10px 0 10px 0;
   border: 1px solid #ebebeb;
@@ -397,6 +397,10 @@ Small Device Styles
   font-size: 32px;
   }
 
+  img {
+    max-width: 480px;
+  }
+
   h1 {
     font-size: 28px;
   }
@@ -438,6 +442,10 @@ Small Device Styles
 
   .inner {
     min-width: 240px;
+    max-width: 320px;
+  }
+
+  img {
     max-width: 320px;
   }
 

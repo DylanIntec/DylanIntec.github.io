@@ -22,3 +22,11 @@ The locations, brief details and url link to comprehensive information where web
 Optical Character Recognition (ORC) can be used when automating a process that requires reading text. This example uses Tesseract, an Open Sourced program by Google, to perform OCR. Image processing is done using OpenCV. Google provides APIs such as Google Image to perform OCR. This has the advantage of being scalable but has a cost per request.
 
 [Show me the code...](2020-10-02-or.html)
+
+## Web Scraping with Python
+
+![alt](images/webscrap.png)
+
+Web scraping is an essential tool for any data analysis project. The Crag is a platform for logging and detailing rock climbing areas and routes. The Crag's well structured data makes it a great candidate for web scraping.
+
+[Show me the code...](2020-02-11-thecrag.html)
