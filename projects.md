@@ -29,4 +29,6 @@ Optical Character Recognition (ORC) can be used when automating a process that r
 
 Web scraping is an essential tool for any data analysis project. The Crag is a platform for logging and detailing rock climbing areas and routes. The Crag's well structured data makes it a great candidate for web scraping.
 
-[Show me the code...](2020-02-11-thecrag.html)
+[Show me the notebook...](2020-02-11-thecrag.html)
+
+[Download the notebook...](notebooks/TheCragAPI.ipynb)

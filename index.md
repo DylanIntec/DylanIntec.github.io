@@ -28,8 +28,7 @@ permalink: index.html
 <img src="images/Intecsea.png"/>
 </div>
 <div class="col2">
-<h3>Floating Systems Engineer</h3>
-<h3>2019 to current</h3>
+<h4>Floating Systems Engineer | 2019 to current </h4>
 <p>Performed hydrodynamic analysis on a variety of floating and subsea structures.</p>
 <p>Used Python on a daily basis to facilitate the processing and visualization of the large amount of data from response based analysis. Created pre- and post-processing functions/classes for a variety of engineering software, then integrated the functions into a custom Python module to automate and streamline analysis.</p>
 </div>
@@ -41,8 +40,7 @@ permalink: index.html
 <img src="images/austal.png"/>
 </div>
 <div class="col2">
-<h3>Naval Architect</h3>
-<h3>2019</h3>
+<h4>Naval Architect | 2019</h4>
 <p>Six month Defence placement at Austal ships as part of the design team for JRK passenger trimaran. Performed structural design and analysis on primary and secondary hull structures to DNV-GL and HSC codes using STRAND7 for FEA. Coordinated with draftsmen in Vietnam to draft the designs.</p>
 <p> Developed and supervised lift plans for unit lifts with shipyard team leads.  Participated in sea trials and inclining experiment for a Pacific Patrol Boat.</p>
 </div>
@@ -54,8 +52,7 @@ permalink: index.html
 <img src="images/defence.png"/>
 </div>
 <div class="col2">
-<h3>Civilian Engineer - Graduate Naval Architect</h3>
-<h3>2018 - 2019</h3>
+<h4>Graduate Naval Architect | 2018 - 2019</h4>
 <p> Performed stability and hydrodynamic analysis on Navy vessels assessing current vessels and tenders to naval standards. This included intact and damage stability, seakeeping using time domain software and resistance calculations using empirical methods and CFD.</p>
 <p>Defence client representative for inclining experiments on Navy landing craft, ANZAC class frigate and patrol boats.</p>
 </div>

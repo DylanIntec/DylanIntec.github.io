@@ -431,6 +431,13 @@ Small Device Styles
 
 }
 
+@media screen and (max-width: 992px) {
+  img {
+    max-width: 100%;
+  }
+}
+
+
 @media screen and (max-width: 320px) {
   body {
     font-size:14px;
@@ -516,5 +523,8 @@ Small Device Styles
 @media (max-width: 600px) {
   .flex-grid {
     display: block;
+  }
+  .col1 img {
+    max-width: 100%;
   }
 }
