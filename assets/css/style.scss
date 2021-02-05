@@ -532,7 +532,15 @@ Small Device Styles
   .col1 img {
     max-width: 100%;
   }
-  .thumbnail {
+  .thumbnail img{
     max-width: 100%;
+  }
+    .thumbnail:hover{
+    width:100%;
+    top:0px;
+    left:0px;
+  }
+  h3, h6, a{
+    text-align: center;
   }
 }

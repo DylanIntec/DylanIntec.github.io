@@ -8,12 +8,11 @@ permalink: index.html
 
 <div class="flex-grid">
 <div class="col1">
-<img src="/images/me.png"/>
+<img src="/images/me.png" width="100%"/>
 <h3>Dylan Van Drunen.</h3>
 <h6>Naval Architect</h6>
-<a href="mailto:dylanvandrunen@gmail.com" >dylanvandrunen@gmail.com</a>
-<br>
-<a href="tel:0427160974">0427160974</a>
+<h6><a href="mailto:dylanvandrunen@gmail.com" >dylanvandrunen@gmail.com</a></h6>
+<h6><a href="tel:0427160974">0427160974</a></h6>
 </div>
 <div class="col2">
 <p vertical-align="middle">
@@ -25,16 +24,16 @@ Naval Architect with three years experience in structural, motions and hydrodyna
 
 <div class="flex-grid">
 <div class="col1">
-<a href="/projects.html"><img src="/images/Code.png" class="thumbnail" height="100"/></a>
+<a href="/projects.html"><img src="/images/Code.png" class="thumbnail"/></a>
 </div>
 <div class="col1">
-<a href="ModelLib.html"><img src="/images/Models.png" class="thumbnail" height="100"/></a>
+<a href="ModelLib.html"><img src="/images/Models.png" class="thumbnail"/></a>
 </div>
 <div class="col1">
-<a href="/photos/pictureLib.html"><img src="/images/Afterwork.png" class="thumbnail" height="100" /></a>
+<a href="/photos/pictureLib.html"><img src="/images/Afterwork.png" class="thumbnail" /></a>
 </div>
 <div class="col1">
-<a href="2020-09-03-AR-for-consulting.html"><img src="/images/slack.jpeg" class="thumbnail" height="100"/></a>
+<a href="2020-09-03-AR-for-consulting.html"><img src="/images/slack.jpeg" class="thumbnail"/></a>
 </div>
 </div>
 
