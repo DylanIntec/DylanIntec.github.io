@@ -79,7 +79,7 @@ Naval Architect with three years experience in structural, motions and hydrodyna
 <h2><a href="https://www.amc.edu.au">Australian Maritime College</a></h2>
 <div class="flex-grid">
 <div class="col1">
-<img src="images/amc.png" width="200"/>
+<img src="images/amc.png"/>
 </div>
 <div class="col2">
 <h3>Bachelor of Maritime Engineering (Naval Architecture) (Honours)</h3>
