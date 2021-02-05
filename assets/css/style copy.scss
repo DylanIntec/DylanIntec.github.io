@@ -88,8 +88,7 @@ h5 {
 }
 
 h6 {
-  font-size: 18px;
-  font-weight: 200;
+  font-size: 16px;
 }
 
 p {
@@ -496,7 +495,7 @@ Small Device Styles
   position:relative;
   top:-5px;
   left:-5px;
-  width:160px;
+  width:200px;
   height:auto;
   display:block;
   z-index:999;
@@ -504,7 +503,6 @@ Small Device Styles
 
 .flex-grid {
   display: flex;
-  max-width: 640px;
 }
 
 .col1 {
@@ -521,18 +519,12 @@ Small Device Styles
   padding: 10px;
 }
 
-.coverimg {
-  background-image: url('images/kal.jpeg');
-}
 
 @media (max-width: 600px) {
   .flex-grid {
     display: block;
   }
   .col1 img {
-    max-width: 100%;
-  }
-  .thumbnail {
     max-width: 100%;
   }
 }

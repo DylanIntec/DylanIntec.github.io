@@ -21,8 +21,9 @@ The locations, brief details and url link to comprehensive information where web
 
 Optical Character Recognition (ORC) can be used when automating a process that requires reading text. This example uses Tesseract, an Open Sourced program by Google, to perform OCR. Image processing is done using OpenCV. Google provides APIs such as Google Image to perform OCR. This has the advantage of being scalable but has a cost per request.
 
-[Show me the code...](2020-10-02-or.html)
+[Show me the notebook...](2020-10-02-or.html)
 
+[Download the notebook...](2020-10-02-or.ipynb)
 ## Web Scraping with Python
 
 ![alt](images/webscrap.png)

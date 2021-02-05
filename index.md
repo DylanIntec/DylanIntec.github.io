@@ -1,23 +1,40 @@
 ---
-layout: default
+layout: landing
 title: Dylan Van Drunen
 permalink: index.html
 ---
 
+# About me
+
+<div class="flex-grid">
+<div class="col1">
+<img src="/images/me.png"/>
+<h3>Dylan Van Drunen.</h3>
+<h6>Naval Architect</h6>
+<a href="mailto:dylanvandrunen@gmail.com" >dylanvandrunen@gmail.com</a>
+<br>
+<a href="tel:0427160974">0427160974</a>
+</div>
+<div class="col2">
+<p vertical-align="middle">
+Naval Architect with three years experience in structural, motions and hydrodynamic analysis of vessels. I enjoy applying my programming knowledge to solve engineering problems by automating processes and providing data-driven insights.</p>
+<img src="images/kal.jpeg" width="370px"/>
+</div>
+</div>
 # Projects
 
 <div class="flex-grid">
 <div class="col1">
-<a href="/projects.html"><img src="/images/Code.png" class="thumbnail" height="100" width="150" /></a>
+<a href="/projects.html"><img src="/images/Code.png" class="thumbnail" height="100"/></a>
 </div>
 <div class="col1">
-<a href="ModelLib.html"><img src="/images/Models.png" class="thumbnail" height="100" width="150" /></a>
+<a href="ModelLib.html"><img src="/images/Models.png" class="thumbnail" height="100"/></a>
 </div>
 <div class="col1">
-<a href="/photos/pictureLib.html"><img src="/images/Afterwork.png" class="thumbnail" height="100" width="150" /></a>
+<a href="/photos/pictureLib.html"><img src="/images/Afterwork.png" class="thumbnail" height="100" /></a>
 </div>
 <div class="col1">
-<a href="2020-09-03-AR-for-consulting.html"><img src="/images/slack.jpeg" class="thumbnail" height="100" width="150" /></a>
+<a href="2020-09-03-AR-for-consulting.html"><img src="/images/slack.jpeg" class="thumbnail" height="100"/></a>
 </div>
 </div>
 
@@ -37,7 +54,7 @@ permalink: index.html
 <h2><a href="https://www.austal.com">Austal Ships</a></h2>
 <div class="flex-grid">
 <div class="col1">
-<img src="images/austal.png"/>
+<img src="images/Austal.png"/>
 </div>
 <div class="col2">
 <h4>Naval Architect | 2019</h4>
