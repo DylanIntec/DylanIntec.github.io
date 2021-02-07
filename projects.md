@@ -45,7 +45,7 @@ Web scraping is an essential tool for any data analysis project. The Crag is a p
 
 ## AR Business Cards
 
-gif of business card
+![alt](images/arbc.gif)
 
 Business cards spiced up with some AR. The AR model is hosted on this website (Github) which is linked via the QR code. The AR animation has image recognition built into it so it tracks the business card.
 
