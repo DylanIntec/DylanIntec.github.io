@@ -19,6 +19,10 @@ The locations, brief details and url link to comprehensive information where web
 
 ## Facebook Data Mining
 
+![cap](https://www.catapultsystems.com/wp-content/uploads/product.png)
+
+Source: [Catapult](https://www.catapultsystems.com)
+
 Everybody is now well aware that Facebook collects your data for personalised ads but how much data do the really collect and store? Thanks to General Data Protection Regulation (GDPR) laws in Europe, it is now easy to download and sift through this data. 
 
 [Facebook instructions here](https://www.facebook.com/help/1701730696756992)
