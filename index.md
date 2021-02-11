@@ -16,7 +16,7 @@ permalink: index.html
 </div>
 <div class="col2">
 <p vertical-align="middle">
-Naval Architect with three years experience in structural, motions and hydrodynamic analysis of vessels. I enjoy applying my programming knowledge to solve engineering problems by automating processes and providing data-driven insights.</p>
+Naval Architect with three years experience in structural, motions, mooring and hydrodynamic analysis of vessels. I enjoy applying my programming knowledge to solve engineering problems by automating processes and providing data-driven insights.</p>
 <img src="images/kal.jpeg" width="370px"/>
 </div>
 </div>

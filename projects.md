@@ -17,6 +17,17 @@ The locations, brief details and url link to comprehensive information where web
 
 [Go to the website...](http://www.adventureoutside.com.au){:target="_blank"}
 
+## Facebook Data Mining
+
+Everybody is now well aware that Facebook collects your data for personalised ads but how much data do the really collect and store? Thanks to General Data Protection Regulation (GDPR) laws in Europe, it is now easy to download and sift through this data. 
+
+[Facebook instructions here](https://www.facebook.com/help/1701730696756992)
+
+[Google instructions here](https://support.google.com/accounts/answer/3024190?hl=en)
+
+There is a lot of data here, 2.6gb from Facebook. I made a Dash app to visualise data I found interesting.
+
+[Link to website here...](https://fb-data-mine.herokuapp.com)
 ## Learning Python for Data Science
 
 ![logo](images/python.png)
