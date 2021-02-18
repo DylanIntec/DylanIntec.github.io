@@ -62,8 +62,12 @@ Web scraping is an essential tool for any data analysis project. The Crag is a p
 
 ![alt](images/arbc.gif)
 
-Business cards spiced up with some AR. The AR model is hosted on this website (Github) which is linked via the QR code. The AR animation has image recognition built into it so it tracks the business card.
+Business cards spiced up with some AR. The AR model was built using Apple's Reality Creator and is hosted on this website (Github). The QR code links to this website for easy access. The AR animation has image recognition built into it so it tracks the business card.
 
 [Link to the model...](2021-02-05-mm-bc.html)
 
-[Link to the arjs...](2021-02-17-arjs.html)
+## Web AR Using ar.js
+
+Apple's Reality Creator is great, providing easy workflow to create interactive AR. Unfortuantly it is only supported on iPhones and iPads leaving out Android users. Web AR using ar.js solves this issue as it is browser based. Laptops, phones and tablets running Chrome, Safari or Firefox are supported. 
+
+To try it out, display this [image](images\climb.jpg) on your computer and open the model on your phone [here](2021-02-17-arjs.html)
