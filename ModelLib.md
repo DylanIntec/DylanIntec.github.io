@@ -6,7 +6,7 @@ title: Model Library
 Models created in Rhino and animated in Blender.  
 Click to view in AR on iPhone or Android.  
 
-## OcraFlex Simulation of an Anchored Yacht
+## OrcaFlex Simulation of an Anchored Yacht
 <model-viewer width="auto"
     src="/models/OrcaBlend.glb"
     ios-src="/models/OrcaBlend.usdz"
