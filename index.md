@@ -41,7 +41,7 @@ Naval Architect with three years experience in structural, motions, mooring and 
 <h2><a href="https://www.fugro.com/">Fugro</a></h2>
 <div class="flex-grid">
 <div class="col1">
-<img src="https://www.fugro.com/images/default-source/About-Fugro/microdata/fugro-logo.jpg"/>
+<img src="https://www.fugro.com/images/default-source/About-Fugro/microdata/fugro-logo.jpg" width="100%"/>
 </div>
 <div class="col2">
 <h4>Project Engineer | 2021 to Current</h4>
