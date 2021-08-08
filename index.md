@@ -38,13 +38,26 @@ Naval Architect with three years experience in structural, motions, mooring and 
 </div>
 
 # Work History
+<h2><a href="https://www.fugro.com/">Fugro</a></h2>
+<div class="flex-grid">
+<div class="col1">
+<img src="images/fugro.jpg"/>
+</div>
+<div class="col2">
+<h4>Project Engineer | 2021 to Current</h4>
+<p>Planning and executing offshore maintenance campaigns.</p>
+<p>Installation analysis of flexibles. </p>
+</div>
+</div>
+
+
 <h2><a href="https://www.advisian.com/en/what-we-do/services/intecsea/innovation">Intecsea</a></h2>
 <div class="flex-grid">
 <div class="col1">
 <img src="images/Intecsea.png"/>
 </div>
 <div class="col2">
-<h4>Floating Systems Engineer | 2019 to current </h4>
+<h4>Floating Systems Engineer | 2019 to 2021 </h4>
 <p>Performed hydrodynamic analysis on a variety of floating and subsea structures.</p>
 <p>Used Python on a daily basis to facilitate the processing and visualization of the large amount of data from response based analysis. Created pre- and post-processing functions/classes for a variety of engineering software, then integrated the functions into a custom Python module to automate and streamline analysis.</p>
 </div>

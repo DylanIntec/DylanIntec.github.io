@@ -13,7 +13,7 @@ Click to view in AR on iPhone or Android.
     style="width: 80%; height: 300px;"
     ar camera-controls background-color="#2CCC">
 </model-viewer>
-## Boat motoring though waves
+## Boat motoring through waves
 <model-viewer width="auto"
     src="/models/boatWave.glb"
     ios-src="/models/boatWave.usdz"
