@@ -1,7 +1,7 @@
 ---
 layout: landing
 title: Dylan Van Drunen
-permalink: index.html
+permalink: index.html!
 ---
 
 # About me
@@ -16,7 +16,7 @@ permalink: index.html
 </div>
 <div class="col2">
 <p vertical-align="middle">
-Naval Architect with three years experience in structural, motions, mooring and hydrodynamic analysis of vessels. I enjoy applying my programming knowledge to solve engineering problems by automating processes and providing data-driven insights.</p>
+Naval Architect with three years experience in structural, motions, mooring and hydrodynamic analysis of vessels. <br> I am currently working for Fugro gaining Project Engineering and subsea experience. <br> I enjoy applying my programming knowledge to solve engineering problems by automating processes and providing data-driven insights.</p>
 <img src="images/kal.jpeg" width="370px"/>
 </div>
 </div>
@@ -45,8 +45,19 @@ Naval Architect with three years experience in structural, motions, mooring and 
 </div>
 <div class="col2">
 <h4>Project Engineer | 2021 to Current</h4>
-<p>Planning and executing offshore maintenance campaigns.</p>
-<p>Installation analysis of flexibles. </p>
+<p>Planning and executing offshore maintenance campaigns and installation analysis.</p>
+<h5>BHP - IMR</h5>
+<li>SCM changeout</li>
+<li>UTA recovery to deck for repairs</li>
+<h5>Jadestone - Rig Pre-Intervention</h5>
+<li>Anode Skid installation</li>
+<li>Tree valve soaking and functioning</li>
+<li>Umbilical Crossover installation</li>
+<h5>Unmanned Surface Vessel <a href='https://www.fugro.com/media-centre/news/fulldetails/2021/07/30/fugro-completes-first-usv-remote-inspection-for-australia-s-woodside'>Fugro Maali</a></h5>
+Project engineering and design/analysis for Fugro's unmanned survey vessel. 
+<img src="images/usv.jpg" width="300px">
+
+<p></p>
 </div>
 </div>
 
