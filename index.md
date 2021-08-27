@@ -1,7 +1,7 @@
 ---
 layout: landing
 title: Dylan Van Drunen
-permalink: index.html!
+permalink: index.html
 ---
 
 # About me
