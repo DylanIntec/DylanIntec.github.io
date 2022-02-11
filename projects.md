@@ -1,12 +1,21 @@
+---
+youtubeId: cW0H2eTIYWA
+---
 # Coding Projects
-
 ## Write OrcaFlex Code with Codex
 
 ### Overview
 
-Codex is a language model created by Open AI that translates natural language into code. It was trained on over 175 billion words scraped from the internet and code from Github. The model does not have any pre existing knowlege of the OcraFlex API as it was not in the training data. I showed the model examples of how to write OrcaFlex code and then replicated some code which I had written for extracting wave elevation, velocity and acceleration. The results were very impressive.
+Codex is a language model created by Open AI that translates natural language into code. It was trained on over 175 billion words scraped from the internet and code from Github. The model does not have any pre existing knowledge of the OcraFlex API as it was not in the training data. I showed the model examples of how to write OrcaFlex code and then replicated some code which I had written for extracting wave elevation, velocity and acceleration. The results were very impressive.
 
-{% include youtubePlayer.html id=cW0H2eTIYWA %}
+<p align="center"><iframe src="https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:6893885192474378241" height="698" width="504" frameborder="0" allowfullscreen="" title="Embedded post"></iframe></p>
+
+## OrcaFlex in AR
+
+### Overview
+I created a simulation of a yacht on anchor while in shifty winds. I then used Python to extract the simulation data and animate the simulation in Blender. Exporting the simulation to a .usdz file to be viewed on a phone in AR.
+
+<p align="center"><iframe src="https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:6804001832822812672" height="622" width="504" frameborder="0" allowfullscreen="" title="Embedded post"></iframe></p>
 
 ## Adventure Dashboard Web App
 ![alt text](images/adventure.png)
@@ -76,6 +85,6 @@ Business cards spiced up with some AR. The AR model was built using Apple's Real
 
 ## Web AR Using ar.js
 
-Apple's Reality Creator is great, providing easy workflow to create interactive AR. Unfortuantly it is only supported on iPhones and iPads leaving out Android users. Web AR using ar.js solves this issue as it is browser based. Laptops, phones and tablets running Chrome, Safari or Firefox are supported. 
+Apple's Reality Creator is great, providing easy workflow to create interactive AR. Unfortunately it is only supported on iPhones and iPads leaving out Android users. Web AR using ar.js solves this issue as it is browser based. Laptops, phones and tablets running Chrome, Safari or Firefox are supported. 
 
 To try it out, display this [image](images\climb.jpg) on your computer and open the model on your phone [here](2021-02-17-arjs.html)
