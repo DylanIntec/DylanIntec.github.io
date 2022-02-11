@@ -1,5 +1,13 @@
 # Coding Projects
 
+## Write OrcaFlex Code with Codex
+
+### Overview
+
+Codex is a language model created by Open AI that translates natural language into code. It was trained on over 175 billion words scraped from the internet and code from Github. The model does not have any pre existing knowlege of the OcraFlex API as it was not in the training data. I showed the model examples of how to write OrcaFlex code and then replicated some code which I had written for extracting wave elevation, velocity and acceleration. The results were very impressive.
+
+{% include youtubePlayer.html id=page.cW0H2eTIYWA %}
+
 ## Adventure Dashboard Web App
 ![alt text](images/adventure.png)
 
