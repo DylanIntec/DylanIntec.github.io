@@ -6,6 +6,15 @@ title: Model Library
 Models created in Rhino and animated in Blender.  
 Click to view in AR on iPhone or Android.  
 
+## Caddy Sleeping Setup
+I scanned the back of the van with the iPhone Lidar scanner to fit check the bed I designed with bikes.
+<model-viewer width="auto"
+    src="/models/caddy_bed.glb"
+    ios-src="/models/caddy_bed.usdz"
+    style="width: 80%; height: 300px;"
+    ar camera-controls background-color="#2CCC">
+</model-viewer>
+
 ## OrcaFlex Simulation of an Anchored Yacht
 <model-viewer width="auto"
     src="/models/OrcaBlend.glb"
