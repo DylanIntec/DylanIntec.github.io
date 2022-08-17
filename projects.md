@@ -1,5 +1,6 @@
 ---
 youtubeId: cW0H2eTIYWA
+layout: landing
 ---
 # Coding Projects
 ## Write OrcaFlex Code with Codex

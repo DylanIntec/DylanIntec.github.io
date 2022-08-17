@@ -12,11 +12,10 @@ permalink: index.html
 <h3>Dylan Van Drunen.</h3>
 <h6>Naval Architect</h6>
 <h6><a href="mailto:dylanvandrunen@gmail.com" >dylanvandrunen@gmail.com</a></h6>
-<h6><a href="tel:0427160974">0427160974</a></h6>
 </div>
 <div class="col2">
 <p vertical-align="middle">
-Naval Architect with four years experience as a Project Engineer specalising in analysis. <br> I am currently working for Nexans Norway gaining Project Engineering and analysis experience in subsea power cables. <br> I enjoy applying my programming knowledge to solve engineering problems by automating processes and providing data-driven insights.</p>
+Naval Architect with four years of experience as a Project Engineer specialising in analysis. <br> I am currently working for Nexans Norway gaining Project Engineering and analysis experience in subsea power cables. <br> I enjoy applying my programming knowledge to solve engineering problems by automating processes and providing data-driven insights.</p>
 <img src="images/kal.jpeg" width="370px"/>
 </div>
 </div>
@@ -30,7 +29,7 @@ Naval Architect with four years experience as a Project Engineer specalising in 
 <a href="models.html"><img src="/images/Models.png" class="thumbnail"/></a>
 </div>
 <div class="col1">
-<a href="/photos/pictureLib.html"><img src="/images/Afterwork.png" class="thumbnail" /></a>
+<a href="pictures.html"><img src="/images/Afterwork.png" class="thumbnail" /></a>
 </div>
 <div class="col1">
 <a href="2020-09-03-AR-for-consulting.html"><img src="/images/slack.jpeg" class="thumbnail"/></a>
@@ -45,7 +44,7 @@ Naval Architect with four years experience as a Project Engineer specalising in 
 </div>
 <div class="col2">
 <h4>Project Engineer | 2022 to Current</h4>
-<p>Planning and executing subsea cable instalation and analysis.</p>
+<p>Planning and executing subsea cable installation and analysis.</p>
 <h5>Chevron</h5>
 <li>Jansz IO subsea compression cable</li>
 <li>BUP Umbilical</li>

@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: landing
 title:  AR in Consulting
 permalink: 2020-09-03-AR-for-consulting.html
 ---
