@@ -16,7 +16,7 @@ permalink: index.html
 </div>
 <div class="col2">
 <p vertical-align="middle">
-Naval Architect with three years experience in structural, motions, mooring and hydrodynamic analysis of vessels. <br> I am currently working for Fugro gaining Project Engineering and subsea experience. <br> I enjoy applying my programming knowledge to solve engineering problems by automating processes and providing data-driven insights.</p>
+Naval Architect with four years experience as a Project Engineer specalising in analysis. <br> I am currently working for Nexans Norway gaining Project Engineering and analysis experience in subsea power cables. <br> I enjoy applying my programming knowledge to solve engineering problems by automating processes and providing data-driven insights.</p>
 <img src="images/kal.jpeg" width="370px"/>
 </div>
 </div>
@@ -27,7 +27,7 @@ Naval Architect with three years experience in structural, motions, mooring and 
 <a href="/projects.html"><img src="/images/Code.png" class="thumbnail"/></a>
 </div>
 <div class="col1">
-<a href="ModelLib.html"><img src="/images/Models.png" class="thumbnail"/></a>
+<a href="models.html"><img src="/images/Models.png" class="thumbnail"/></a>
 </div>
 <div class="col1">
 <a href="/photos/pictureLib.html"><img src="/images/Afterwork.png" class="thumbnail" /></a>
@@ -38,13 +38,31 @@ Naval Architect with three years experience in structural, motions, mooring and 
 </div>
 
 # Work History
+<h2><a href="https://www.nexans.com/en/">Nexans</a></h2>
+<div class="flex-grid">
+<div class="col1">
+<img src="images/nexans.jpg"/>
+</div>
+<div class="col2">
+<h4>Project Engineer | 2022 to Current</h4>
+<p>Planning and executing subsea cable instalation and analysis.</p>
+<h5>Chevron</h5>
+<li>Jansz IO subsea compression cable</li>
+<li>BUP Umbilical</li>
+<h5>Internal Software Developemnt</h5>
+<li>Converting Excel tools into web apps</li>
+<li>Automating regular lay analysis</li>
+<p></p>
+</div>
+</div>
+
 <h2><a href="https://www.fugro.com/">Fugro</a></h2>
 <div class="flex-grid">
 <div class="col1">
 <img src="images/fugro.jpg"/>
 </div>
 <div class="col2">
-<h4>Project Engineer | 2021 to Current</h4>
+<h4>Project Engineer | 2021 to 2022</h4>
 <p>Planning and executing offshore maintenance campaigns and installation analysis.</p>
 <h5>BHP - IMR</h5>
 <li>SCM changeout</li>
@@ -56,7 +74,6 @@ Naval Architect with three years experience in structural, motions, mooring and 
 <h5>Unmanned Surface Vessel <a href='https://www.fugro.com/media-centre/news/fulldetails/2021/07/30/fugro-completes-first-usv-remote-inspection-for-australia-s-woodside'>Fugro Maali</a></h5>
 Project engineering and design/analysis for Fugro's unmanned survey vessel. 
 <img src="images/usv.jpg" width="300px">
-
 <p></p>
 </div>
 </div>
