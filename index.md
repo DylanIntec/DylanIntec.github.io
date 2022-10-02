@@ -4,6 +4,8 @@ title: Dylan Van Drunen
 permalink: index.html
 ---
 
+[//]: # (bundle exec jekyll serve)
+
 # About me
 
 <div class="flex-grid">
@@ -15,7 +17,7 @@ permalink: index.html
 </div>
 <div class="col2">
 <p vertical-align="middle">
-Naval Architect with four years of experience as a Project Engineer specialising in analysis. <br> I am currently working for Nexans Norway gaining Project Engineering and analysis experience in subsea power cables. <br> I enjoy applying my programming knowledge to solve engineering problems by automating processes and providing data-driven insights.</p>
+Naval Architect with four years of experience as a Project Engineer specializing in analysis. <br> I am currently working for Nexans Norway gaining Project Engineering and analysis experience in subsea power cables. <br> I enjoy applying my programming knowledge to solve engineering problems by automating processes and providing data-driven insights.</p>
 <img src="images/kal.jpeg" width="370px"/>
 </div>
 </div>
@@ -48,7 +50,7 @@ Naval Architect with four years of experience as a Project Engineer specialising
 <h5>Chevron</h5>
 <li>Jansz IO subsea compression cable</li>
 <li>BUP Umbilical</li>
-<h5>Internal Software Developemnt</h5>
+<h5>Internal Software Development</h5>
 <li>Converting Excel tools into web apps</li>
 <li>Automating regular lay analysis</li>
 <p></p>

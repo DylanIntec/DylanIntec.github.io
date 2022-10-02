@@ -2,7 +2,14 @@
 youtubeId: cW0H2eTIYWA
 layout: landing
 ---
+
+
+
 # Coding Projects
+## Pyscript
+[here](pyscript-demo.html)
+
+
 ## Write OrcaFlex Code with Codex
 
 ### Overview
