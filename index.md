@@ -45,7 +45,24 @@ Naval Architect with four years of experience as a Project Engineer specializing
 <img src="images/nexans.jpg"/>
 </div>
 <div class="col2">
-<h4>Project Engineer | 2022 to Current</h4>
+<h4>Senior Engineer, Installation Analysis Discipline Lead | 2023 to Current</h4>
+<p>Overseeing installation analysis for all current subsea cable projects in Nexans</p>
+<li>Identifying analysis requirements in contracts</li>
+<li>Distribing analysis tasks</li>
+<li>Overseeing and mentoring analysis engineers</li>
+<li>Running analysis</li>
+<li>Internal software development</li>
+<p></p>
+</div>
+</div>
+
+<h2><a href="https://www.nexans.com/en/">Nexans</a></h2>
+<div class="flex-grid">
+<div class="col1">
+<img src="images/nexans.jpg"/>
+</div>
+<div class="col2">
+<h4>Project Engineer | 2022 to 2023</h4>
 <p>Planning and executing subsea cable installation and analysis.</p>
 <h5>Chevron</h5>
 <li>Jansz IO subsea compression cable</li>
