@@ -6,6 +6,12 @@ layout: landing
 
 
 # Coding Projects
+
+## My Journey
+An interactive scrollytelling experience that follows my journey from growing up in Tasmania to studying at the Australian Maritime College. Using modern web technologies to create an immersive story with maps and animations.
+
+[View My Journey](my-story.html)
+
 ## Pyscript
 [here](pyscript-demo.html)
 
