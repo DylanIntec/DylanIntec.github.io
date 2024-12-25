@@ -40,6 +40,12 @@
             margin-top: 70vh;
             position: relative;
         }
+        /* Make step 11 transparent */
+        [data-step="11"] .step-content {
+            background: transparent;
+            box-shadow: none;
+            padding: 0;
+        }
         .content-image {
             width: 100%;
             height: 200px;
@@ -90,10 +96,42 @@
             line-height: 1.6;
             color: #666;
         }
+        .distance-counter {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            z-index: 5;
+            font-size: 24px;
+            font-weight: bold;
+            display: none;
+        }
+        /* Add styles for platform labels */
+        .platform-marker {
+            cursor: pointer;
+        }
+        .platform-label {
+            background: white;
+            color: black;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            white-space: nowrap;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 <body>
     <div id="map"></div>
+    <div class="distance-counter">Distance: <span id="km-count">0</span> km</div>
     <div class="overlay-images">
         <img src="images/mystory/beach.jpeg" alt="Tasmanian Beach" class="slide-image slide-left">
         <img src="images/mystory/snow.jpg" alt="Tasmanian Snow" class="slide-image slide-right">
@@ -109,6 +147,15 @@
     </div>
     <div class="overlay-images defence-overlay">
         <img src="images/mystory/hld.jpg" alt="Defence" class="slide-image slide-left">
+    </div>
+    <div class="overlay-images queen-overlay">
+        <img src="images/mystory/queen.jpg" alt="Queen" class="slide-image slide-left">
+    </div>
+    <div class="overlay-images usv-overlay">
+        <img src="images/usv.jpg" alt="USV" class="slide-image slide-right">
+    </div>
+    <div class="overlay-images etive-overlay">
+        <img src="images/mystory/etive.png" alt="Etive" class="slide-image slide-right">
     </div>
     <div id="scrolly">
         <div class="step" data-step="1">
@@ -178,12 +225,35 @@
         </div>
         <div class="step" data-step="11">
             <div class="step-content">
-                <p>I drove across Australia to Perth, a 3000km journey.</p>
+                <!-- <p>I drove across Australia to Perth, a 3000km journey.</p> -->
             </div>
         </div>
         <div class="step" data-step="12">
             <div class="step-content">
-                <p>I drove across Australia to Perth, a 3000km journey.</p>
+                <p>That was a long drive.</p>
+            </div>
+        </div>
+        <div class="step" data-step="13">
+            <div class="step-content">
+                <p>First I worked for Austal as designing a trimaran</p>
+            </div>
+        </div>
+        <div class="step" data-step="14">
+            <div class="step-content">
+                <p>Then for a subsea consultancy where I used Python for data analysis and visualisation.
+                </p>
+            </div>
+        </div>
+        <div class="step" data-step="15">
+            <div class="step-content">
+                <p>During COVID there was not enough work so I joined Fugro get offshore experience.
+                </p>
+            </div>
+        </div>
+        <div class="step" data-step="16">
+            <div class="step-content">
+                <p>Australia is one the largest exporter of LNG in the world.
+                </p>
             </div>
         </div>
     </div>
@@ -203,8 +273,9 @@
         const waypoints = [
             [149.1300, -35.2809], // Canberra
             [147.3667, -35.1082], // Wagga Wagga
-            [142.2181, -37.8279], // Hamilton
-            [140.7852, -37.8277], // Mount Gambier
+            [144.2000, -34.2000], // Hay
+            [141.6000, -34.1800], // Mildura
+            [140.5933, -33.9833], // Renmark
             [138.6007, -34.9285], // Adelaide
             [136.7164, -32.4959], // Port Augusta
             [134.7553, -31.9505], // Ceduna
@@ -214,6 +285,25 @@
             [121.4667, -31.9505], // Norseman
             [118.1542, -32.0397], // Southern Cross
             [115.8575, -31.9505]  // Perth
+        ];
+
+        // Define oil and gas platforms with offset positions for labels
+        const platforms = [
+            // Northwest Shelf group (top)
+            { name: "Angel", coordinates: [116.3500, -19.5000], labelOffset: [-150, -120] },
+            { name: "North Rankin", coordinates: [116.1361, -19.5850], labelOffset: [0, -120] },
+            { name: "Pluto", coordinates: [116.1500, -19.5333], labelOffset: [150, -120] },
+            
+            // Middle group
+            { name: "Goodwyn A", coordinates: [116.0833, -19.7333], labelOffset: [-150, 0] },
+            { name: "Wheatstone", coordinates: [115.9167, -20.0667], labelOffset: [150, 0] },
+            
+            // Bottom group
+            { name: "Gorgon", coordinates: [115.3667, -20.8000], labelOffset: [0, 120] },
+            
+            // Browse Basin group (separate area)
+            { name: "Prelude FLNG", coordinates: [123.7500, -13.8000], labelOffset: [-80, 0] },
+            { name: "Ichthys", coordinates: [123.5000, -13.9000], labelOffset: [80, 0] }
         ];
 
         // Function to get directions between two points
@@ -268,6 +358,46 @@
                     'line-opacity': 0.8
                 }
             });
+
+            // Add platform markers
+            platforms.forEach(platform => {
+                // Create a DOM element for each marker
+                const el = document.createElement('div');
+                el.className = 'platform-marker';
+                el.style.width = '6px';
+                el.style.height = '6px';
+                el.style.borderRadius = '50%';
+                el.style.backgroundColor = '#000';
+                el.style.opacity = '0';
+                el.style.transition = 'opacity 0.5s ease-in-out';
+
+                // Add markers to the map
+                const marker = new mapboxgl.Marker(el)
+                    .setLngLat(platform.coordinates)
+                    .addTo(map);
+
+                // Calculate label position with offset
+                const labelCoordinates = [
+                    platform.coordinates[0] + platform.labelOffset[0] * 0.001,
+                    platform.coordinates[1] + platform.labelOffset[1] * 0.001
+                ];
+
+                // Add a popup with the platform name
+                const popup = new mapboxgl.Popup({
+                    closeButton: false,
+                    closeOnClick: false,
+                    className: 'platform-label',
+                    anchor: 'bottom',
+                    offset: [0, -10]
+                })
+                    .setLngLat(labelCoordinates)
+                    .setHTML(platform.name)
+                    .addTo(map);
+
+                // Store elements for later use
+                platform.element = el;
+                platform.popup = popup.getElement();
+            });
         });
 
         // Initialize scrollama
@@ -294,20 +424,32 @@
                 };
                 if (map.getSource('route')) {
                     map.getSource('route').setData(currentRoute);
+                    
+                    // Update distance counter
+                    const distance = calculateTotalDistance(routeCoordinates, numPoints);
+                    document.getElementById('km-count').textContent = distance;
                 }
             }
         })
         .onStepEnter(response => {
             const step = response.element.dataset.step;
             
-            // Handle beach/snow images animation
-            if (step === '2') {
-                document.querySelector('.overlay-images:not(.sailing-overlay)').classList.add('active');
+            // Show/hide distance counter
+            const distanceCounter = document.querySelector('.distance-counter');
+            if (step === '11') {
+                distanceCounter.style.display = 'block';
             } else {
-                document.querySelector('.overlay-images:not(.sailing-overlay)').classList.remove('active');
+                distanceCounter.style.display = 'none';
             }
 
-            // Handle sailing image animation
+            // Handle beach/snow images animation
+            if (step === '2') {
+                document.querySelector('.overlay-images:not(.sailing-overlay):not(.queen-overlay)').classList.add('active');
+            } else {
+                document.querySelector('.overlay-images:not(.sailing-overlay):not(.queen-overlay)').classList.remove('active');
+            }
+
+            // Handle other image animations
             if (step === '5') {
                 document.querySelector('.sailing-overlay').classList.add('active');
             } else {
@@ -327,6 +469,16 @@
                 document.querySelector('.sub-overlay').classList.add('active');
             } else {
                 document.querySelector('.sub-overlay').classList.remove('active');
+            }
+            if (step === '13') {
+                document.querySelector('.queen-overlay').classList.add('active');
+            } else {
+                document.querySelector('.queen-overlay').classList.remove('active');
+            }
+            if (step === '16') {
+                document.querySelector('.etive-overlay').classList.add('active');
+            } else {
+                document.querySelector('.etive-overlay').classList.remove('active');
             }
             
             switch(step) {
@@ -358,7 +510,7 @@
                     map.flyTo({
                         center: [147.1345, -41.4419], // Launceston
                         zoom: 12,
-                        duration: 8000
+                        duration: 5000
                     });
                     break;
                 case '8':
@@ -374,39 +526,25 @@
                         zoom: 4,
                         duration: 3000
                     });
-                    // Update route coordinates to be more detailed
-                    const routeData = {
-                        'type': 'Feature',
-                        'geometry': {
-                            'type': 'LineString',
-                            'coordinates': [
-                                [149.1300, -35.2809], // Canberra
-                                [147.3667, -35.1082], // Wagga Wagga
-                                [144.9631, -37.8136], // Melbourne
-                                [142.2181, -37.8279], // Hamilton
-                                [140.7852, -37.8277], // Mount Gambier
-                                [138.6007, -34.9285], // Adelaide
-                                [136.7164, -32.4959], // Port Augusta
-                                [134.7553, -31.9505], // Ceduna
-                                [131.0000, -31.9505], // Nullarbor
-                                [128.8000, -31.9505], // Border Village
-                                [125.0000, -31.9505], // Balladonia
-                                [121.4667, -31.9505], // Norseman
-                                [118.1542, -32.0397], // Southern Cross
-                                [115.8575, -31.9505]  // Perth
-                            ]
-                        }
-                    };
-                    
-                    if (map.getSource('route')) {
-                        map.getSource('route').setData({
-                            'type': 'Feature',
-                            'geometry': {
-                                'type': 'LineString',
-                                'coordinates': []
-                            }
-                        });
-                    }
+                    break;
+                case '13':
+                    map.flyTo({
+                        center: [115.8575, -31.9505], // Perth
+                        zoom: 11,
+                        duration: 5000
+                    });
+                    break;
+                case '16':
+                    map.flyTo({
+                        center: [116.8456, -20], // Karratha
+                        zoom: 8,
+                        duration: 5000
+                    });
+                    // Show platform markers and labels
+                    platforms.forEach(platform => {
+                        platform.element.style.opacity = '1';
+                        platform.popup.style.opacity = '1';
+                    });
                     break;
             }
         })
@@ -419,6 +557,30 @@
 
         // Handle window resize
         window.addEventListener('resize', scroller.resize);
+
+        // Function to calculate distance between two points
+        function calculateDistance(coord1, coord2) {
+            const R = 6371; // Earth's radius in km
+            const lat1 = coord1[1] * Math.PI / 180;
+            const lat2 = coord2[1] * Math.PI / 180;
+            const deltaLat = (coord2[1] - coord1[1]) * Math.PI / 180;
+            const deltaLon = (coord2[0] - coord1[0]) * Math.PI / 180;
+
+            const a = Math.sin(deltaLat/2) * Math.sin(deltaLat/2) +
+                    Math.cos(lat1) * Math.cos(lat2) *
+                    Math.sin(deltaLon/2) * Math.sin(deltaLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        // Function to calculate total distance of route up to a point
+        function calculateTotalDistance(coordinates, upToIndex) {
+            let totalDistance = 0;
+            for (let i = 0; i < upToIndex - 1; i++) {
+                totalDistance += calculateDistance(coordinates[i], coordinates[i + 1]);
+            }
+            return Math.round(totalDistance);
+        }
     </script>
 </body>
 </html> 
