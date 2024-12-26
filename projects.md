@@ -10,11 +10,11 @@ layout: landing
 ## My Journey
 An interactive scrollytelling experience that follows my journey from growing up in Tasmania to studying at the Australian Maritime College. Using modern web technologies to create an immersive story with maps and animations.
 
+Without the help of Cusor this would have taken many more hours to create.
+
 [View My Journey](my-story.html)
 
-## Pyscript
-[here](pyscript-demo.html)
-
+![alt text](images/mystory/cover.JPEG)
 
 ## Write OrcaFlex Code with Codex
 
@@ -46,13 +46,10 @@ The website is a multipage Dash App. Dash was created by Plotly to easily create
 
 The locations, brief details and url link to comprehensive information where web-scraped off the main activity websites. The web-scraping was done in Python using a combination of Requests, Beautiful Soup and Selenium. GPS coordinates were either web-scraped or using Googles Geolocation API.
 
-[Go to the website...](http://www.adventureoutside.com.au){:target="_blank"}
+The Website is now offline as Heroku is no longer free.
 
 ## Facebook Data Mining
 
-![cap](https://www.catapultsystems.com/wp-content/uploads/product.png)
-
-Source: [Catapult](https://www.catapultsystems.com)
 
 Everybody is now well aware that Facebook collects your data for personalised ads but how much data do the really collect and store? Thanks to General Data Protection Regulation (GDPR) laws in Europe, it is now easy to download and sift through this data. 
 
@@ -62,7 +59,6 @@ Everybody is now well aware that Facebook collects your data for personalised ad
 
 There is a lot of data here, 2.6gb from Facebook. I made a Dash app to visualise data I found interesting.
 
-[Link to website here...](https://fb-data-mine.herokuapp.com)
 ## Learning Python for Data Science
 
 ![logo](images/python.png)
@@ -97,8 +93,3 @@ Business cards spiced up with some AR. The AR model was built using Apple's Real
 
 [Link to the model...](2021-02-05-mm-bc.html)
 
-## Web AR Using ar.js
-
-Apple's Reality Creator is great, providing easy workflow to create interactive AR. Unfortunately it is only supported on iPhones and iPads leaving out Android users. Web AR using ar.js solves this issue as it is browser based. Laptops, phones and tablets running Chrome, Safari or Firefox are supported. 
-
-To try it out, display this [image](images\climb.jpg) on your computer and open the model on your phone [here](2021-02-17-arjs.html)
