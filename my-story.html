@@ -40,8 +40,9 @@
             margin-top: 70vh;
             position: relative;
         }
-        /* Make step 11 transparent */
-        [data-step="11"] .step-content {
+        /* Make step 11 and 17 transparent */
+        [data-step="11"] .step-content,
+        [data-step="17"] .step-content {
             background: transparent;
             box-shadow: none;
             padding: 0;
@@ -98,7 +99,7 @@
         }
         .distance-counter {
             position: fixed;
-            top: 50%;
+            top: 25vh;  /* Position at 25% of viewport height */
             left: 50%;
             transform: translate(-50%, -50%);
             background: rgba(255, 255, 255, 0.9);
@@ -110,27 +111,173 @@
             font-weight: bold;
             display: none;
         }
-        /* Add styles for platform labels */
-        .platform-marker {
-            cursor: pointer;
+        /* Add styles for plane marker */
+        .plane-marker {
+            width: 20px;
+            height: 20px;
+            background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%234287f5"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>');
+            background-size: cover;
+            transform: rotate(-45deg);
         }
-        .platform-label {
+        /* Add styles for thumbnail */
+        .thumbnail-marker {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 5;
+            transform-origin: center center;
+        }
+
+        .thumbnail-marker img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .thumbnail-marker:hover {
+            transform: scale(1.1);
+            z-index: 6;
+        }
+
+        .thumbnail-popup {
+            display: none;
+            position: fixed;
+            width: 400px;
+            height: 300px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             background: white;
-            color: black;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 500;
-            pointer-events: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            overflow: hidden;
+            z-index: 100;
+            pointer-events: auto;
+        }
+
+        .thumbnail-marker:hover .thumbnail-popup {
+            display: block;
+        }
+
+        .thumbnail-popup img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        /* Add styles for browser marker */
+        .browser-marker {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 5;
+            transform-origin: center center;
+        }
+
+        .browser-marker img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .browser-marker:hover {
+            transform: scale(1.1);
+            z-index: 6;
+        }
+
+        /* Add debug overlay style */
+        .debug-overlay {
+            display: none;
+        }
+
+        /* Add styles for background transitions */
+        .background-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
             opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-            white-space: nowrap;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            transition: opacity 1.5s ease-in-out;
+            z-index: 2;  /* Above map */
+        }
+
+        .background-image.active {
+            opacity: 1;
+        }
+
+        /* Ensure map is hidden during these steps */
+        [data-step="21"] ~ #map,
+        [data-step="22"] ~ #map,
+        [data-step="23"] ~ #map {
+            opacity: 0 !important;
+            transition: opacity 1.5s ease-in-out;
+            z-index: 1;  /* Below background images */
+        }
+
+        /* Add white text for these steps */
+        [data-step="21"] .step-content,
+        [data-step="22"] .step-content,
+        [data-step="23"] .step-content {
+            background: none;
+            color: white;
+            z-index: 3;  /* Above background images */
+            position: relative;
+        }
+
+        [data-step="21"] .step-content p,
+        [data-step="22"] .step-content p,
+        [data-step="23"] .step-content p {
+            color: white;
+            font-size: 1.5em;
+        }
+
+        /* Add styles for bite overlay */
+        .bite-overlay {
+            z-index: 6;  /* Make sure it appears above the map */
+        }
+        
+        .bite-overlay .slide-image {
+            width: 40vw;  /* Smaller size */
+            height: 40vh;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            opacity: 0;
+        }
+        
+        .bite-overlay.active .slide-image {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+        
+        .bite-overlay.active .slide-right {
+            right: 5%;
+            opacity: 1;
         }
     </style>
 </head>
 <body>
     <div id="map"></div>
+    <img src="images/mystory/aurora.jpg" alt="Aurora" class="background-image" id="aurora-bg">
+    <img src="images/mystory/bike.JPEG" alt="Biking" class="background-image" id="bike-bg">
+    <img src="images/mystory/snow.JPEG" alt="Snow" class="background-image" id="snow-bg">
     <div class="distance-counter">Distance: <span id="km-count">0</span> km</div>
     <div class="overlay-images">
         <img src="images/mystory/beach.jpeg" alt="Tasmanian Beach" class="slide-image slide-left">
@@ -156,6 +303,9 @@
     </div>
     <div class="overlay-images etive-overlay">
         <img src="images/mystory/etive.png" alt="Etive" class="slide-image slide-right">
+    </div>
+    <div class="overlay-images bite-overlay">
+        <img src="images/mystory/bite.JPEG" alt="Bite" class="slide-image slide-right">
     </div>
     <div id="scrolly">
         <div class="step" data-step="1">
@@ -185,7 +335,7 @@
         </div>
         <div class="step" data-step="5">
             <div class="step-content">
-                <h2>Sailing Adventures</h2>
+                <h2>Sailing</h2>
                 <p>The waters around Tasmania became my playground, where I developed a love for sailing.</p>
             </div>
         </div>
@@ -197,8 +347,8 @@
         </div>
         <div class="step" data-step="7">
             <div class="step-content">
-                <h2>Journey to University</h2>
-                <p>I always knew I wanted to be an engineer but I wasn't sure which type. After reading about Naval Architecture at the Australian Maritime College, I knew combiining me love of the sea and engineering was the path for me.</p>
+                <h2>University</h2>
+                <p>I always knew I wanted to be an engineer but I wasn't sure which type. After reading about Naval Architecture at the Australian Maritime College, I knew combining my love of the sea and engineering was the path for me.</p>
             </div>
         </div>
         <div class="step" data-step="7">
@@ -215,12 +365,12 @@
         </div>
         <div class="step" data-step="9">
             <div class="step-content">
-                <p>Working at Defence gave me hands-on experience conducting ship stability tests, analyzing vessel hydrodynamics, and calcualting vessel stability.</p>
+                <p>Working at Defence gave me hands-on experience conducting ship stability tests, analysing vessel hydrodynamics, and calculating vessel stability.</p>
             </div>
         </div>
         <div class="step" data-step="10">
             <div class="step-content">
-                <p>I enjoyed working with Defence but I knew I wanted to move to Norway with my girlfriend in the future. As Norway has a large subsea industry needed to build experience in the field. I moved to Perth where the main subsea industry is based</p>
+                <p>As part of my graduate program at Defence, I did a 6 month placement at Austal designing a trimaran. Austal is based in Perth, so I moved there.</p>
             </div>
         </div>
         <div class="step" data-step="11">
@@ -235,24 +385,75 @@
         </div>
         <div class="step" data-step="13">
             <div class="step-content">
-                <p>First I worked for Austal as designing a trimaran</p>
+                <h2>Austal</h2>
+                <p>I enjoyed working in the design office and right next to the shipyard at Austal.</p>
             </div>
         </div>
         <div class="step" data-step="14">
             <div class="step-content">
-                <p>Then for a subsea consultancy where I used Python for data analysis and visualisation.
+                <h2>Intecsea</h2>
+                <p>After working at Austal, I started working for Intecsea. There I gained knowledge in Python, Orcaflex and hydrodynamic analysis.
                 </p>
             </div>
         </div>
         <div class="step" data-step="15">
             <div class="step-content">
-                <p>During COVID there was not enough work so I joined Fugro get offshore experience.
-                </p>
+                <h2>Fugro</h2>
+                <p>After working on the analysis side for a couple of years, I wanted to gain offshore experience. I joined Fugro, where I worked as both a project engineer and an analysis engineer for IMR projects.</p>
             </div>
         </div>
         <div class="step" data-step="16">
             <div class="step-content">
-                <p>Australia is one the largest exporter of LNG in the world.
+                <p>I really enjoyed working at Fugro, but my Norwegian girlfriend got a job in Oslo, so it was time to move to Norway for the next adventure.
+                </p>
+            </div>
+        </div>
+        <div class="step" data-step="17">
+            <div class="step-content">
+                <!-- <p>I reaid restrictionsor the next adventure.
+                </p> -->
+            </div>
+        </div>
+        <div class="step" data-step="18">
+            <div class="step-content">
+                <p>I actually like watching movies on the plane 🍿.
+                </p>
+            </div>
+        </div>
+        <div class="step" data-step="19">
+            <div class="step-content">
+                <h2>Nexans</h2>
+                <p>I have been in Oslo since 2022 working for Nexans. First as a combined project and analysis engineer, then as the Marine Installation Analysis Lead.
+                </p>
+            </div>
+        </div>
+        <div class="step" data-step="20">
+            <div class="step-content">
+                <p>And enjoying all that Norway and the rest of Europe has to offer.
+                </p>
+            </div>
+        </div>
+        <div class="step" data-step="21">
+            <div class="step-content">
+                <p>Working in the office and offshore</a>
+                </p>
+            </div>
+        </div>
+        <div class="step" data-step="22">
+            <div class="step-content">
+                <p>And playing in the mountains</a>
+                </p>
+            </div>
+        </div>
+        <div class="step" data-step="23">
+            <div class="step-content">
+                <p>All year round</a>
+                </p>
+            </div>
+        </div>
+        <div class="step" data-step="24">
+            <div class="step-content">
+                <p>Thanks for joining me on this journey, I hope you enjoyed it. <a href="/">Back to home</a>
                 </p>
             </div>
         </div>
@@ -287,25 +488,6 @@
             [115.8575, -31.9505]  // Perth
         ];
 
-        // Define oil and gas platforms with offset positions for labels
-        const platforms = [
-            // Northwest Shelf group (top)
-            { name: "Angel", coordinates: [116.3500, -19.5000], labelOffset: [-150, -120] },
-            { name: "North Rankin", coordinates: [116.1361, -19.5850], labelOffset: [0, -120] },
-            { name: "Pluto", coordinates: [116.1500, -19.5333], labelOffset: [150, -120] },
-            
-            // Middle group
-            { name: "Goodwyn A", coordinates: [116.0833, -19.7333], labelOffset: [-150, 0] },
-            { name: "Wheatstone", coordinates: [115.9167, -20.0667], labelOffset: [150, 0] },
-            
-            // Bottom group
-            { name: "Gorgon", coordinates: [115.3667, -20.8000], labelOffset: [0, 120] },
-            
-            // Browse Basin group (separate area)
-            { name: "Prelude FLNG", coordinates: [123.7500, -13.8000], labelOffset: [-80, 0] },
-            { name: "Ichthys", coordinates: [123.5000, -13.9000], labelOffset: [80, 0] }
-        ];
-
         // Function to get directions between two points
         async function getDirections(start, end) {
             const query = await fetch(
@@ -327,6 +509,57 @@
 
         let routeCoordinates = [];
 
+        // Function to generate intermediate points for a great circle path
+        function generateGreatCirclePath(start, end, numPoints = 100) {
+            const points = [];
+            for (let i = 0; i <= numPoints; i++) {
+                const fraction = i / numPoints;
+                
+                // Convert to radians
+                const lat1 = start[1] * Math.PI / 180;
+                const lon1 = start[0] * Math.PI / 180;
+                const lat2 = end[1] * Math.PI / 180;
+                const lon2 = end[0] * Math.PI / 180;
+
+                // Calculate intermediate point
+                const d = 2 * Math.asin(Math.sqrt(
+                    Math.pow(Math.sin((lat1 - lat2) / 2), 2) +
+                    Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin((lon1 - lon2) / 2), 2)
+                ));
+                
+                const A = Math.sin((1 - fraction) * d) / Math.sin(d);
+                const B = Math.sin(fraction * d) / Math.sin(d);
+                
+                const x = A * Math.cos(lat1) * Math.cos(lon1) + B * Math.cos(lat2) * Math.cos(lon2);
+                const y = A * Math.cos(lat1) * Math.sin(lon1) + B * Math.cos(lat2) * Math.sin(lon2);
+                const z = A * Math.sin(lat1) + B * Math.sin(lat2);
+                
+                const lat = Math.atan2(z, Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+                const lon = Math.atan2(y, x);
+                
+                points.push([lon * 180 / Math.PI, lat * 180 / Math.PI]);
+            }
+            return points;
+        }
+
+        // Add flight path coordinates with great circle paths through Doha
+        const flightPath = {
+            'type': 'Feature',
+            'geometry': {
+                'type': 'LineString',
+                'coordinates': [
+                    ...generateGreatCirclePath(
+                        [115.8575, -32.02], // Perth
+                        [51.5333, 25.2867]  // Doha
+                    ),
+                    ...generateGreatCirclePath(
+                        [51.5333, 25.2867], // Doha
+                        [10.7522, 59.9139]  // Oslo
+                    ).slice(1)  // Remove first point to avoid duplicate
+                ]
+            }
+        };
+
         map.on('load', async () => {
             // Get the full route when the map loads
             routeCoordinates = await getFullRoute();
@@ -336,7 +569,18 @@
                 'type': 'geojson',
                 'data': {
                     'type': 'Feature',
-                    'properties': {},
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': []
+                    }
+                }
+            });
+
+            // Add flight path source and layer
+            map.addSource('flight', {
+                'type': 'geojson',
+                'data': {
+                    'type': 'Feature',
                     'geometry': {
                         'type': 'LineString',
                         'coordinates': []
@@ -359,46 +603,225 @@
                 }
             });
 
-            // Add platform markers
-            platforms.forEach(platform => {
-                // Create a DOM element for each marker
-                const el = document.createElement('div');
-                el.className = 'platform-marker';
-                el.style.width = '6px';
-                el.style.height = '6px';
-                el.style.borderRadius = '50%';
-                el.style.backgroundColor = '#000';
-                el.style.opacity = '0';
-                el.style.transition = 'opacity 0.5s ease-in-out';
-
-                // Add markers to the map
-                const marker = new mapboxgl.Marker(el)
-                    .setLngLat(platform.coordinates)
-                    .addTo(map);
-
-                // Calculate label position with offset
-                const labelCoordinates = [
-                    platform.coordinates[0] + platform.labelOffset[0] * 0.001,
-                    platform.coordinates[1] + platform.labelOffset[1] * 0.001
-                ];
-
-                // Add a popup with the platform name
-                const popup = new mapboxgl.Popup({
-                    closeButton: false,
-                    closeOnClick: false,
-                    className: 'platform-label',
-                    anchor: 'bottom',
-                    offset: [0, -10]
-                })
-                    .setLngLat(labelCoordinates)
-                    .setHTML(platform.name)
-                    .addTo(map);
-
-                // Store elements for later use
-                platform.element = el;
-                platform.popup = popup.getElement();
+            map.addLayer({
+                'id': 'flight',
+                'type': 'line',
+                'source': 'flight',
+                'layout': {
+                    'line-join': 'round',
+                    'line-cap': 'round'
+                },
+                'paint': {
+                    'line-color': '#4287f5',
+                    'line-width': 3,
+                    'line-dasharray': [2, 2]
+                }
             });
+
+            // Create plane marker element
+            const planeEl = document.createElement('div');
+            planeEl.className = 'plane-marker';
+            
+            // Add plane marker to map
+            const planeMarker = new mapboxgl.Marker({
+                element: planeEl,
+                rotationAlignment: 'map'
+            }).setLngLat([0, 0]).addTo(map);
+
+            // Store plane marker for later use
+            window.planeMarker = planeMarker;
+
+            // Add thumbnail marker for Henderson
+            const hendersonMarker = document.createElement('div');
+            hendersonMarker.className = 'thumbnail-marker';
+            hendersonMarker.style.display = 'none'; // Initially hidden
+            
+            const thumbnail = document.createElement('img');
+            thumbnail.src = 'images/mystory/queen.jpg';
+            thumbnail.alt = 'Queen at Henderson';
+            
+            const popup = document.createElement('div');
+            popup.className = 'thumbnail-popup';
+            const popupImg = document.createElement('img');
+            popupImg.src = 'images/mystory/queen.jpg';
+            popupImg.alt = 'Queen at Henderson';
+            popup.appendChild(popupImg);
+            
+            hendersonMarker.appendChild(thumbnail);
+            hendersonMarker.appendChild(popup);
+            
+            // Add marker to map at Henderson's location
+            window.hendersonMarker = new mapboxgl.Marker({
+                element: hendersonMarker,
+                anchor: 'center'
+            })
+            .setLngLat([115.7667, -32.1667]) // Henderson coordinates
+            .addTo(map);
+
+            // Store marker for later use
+            window.hendersonMarker = hendersonMarker;
+
+            // Add browser marker for Perth
+            const browserMarker = document.createElement('div');
+            browserMarker.className = 'browser-marker';
+            browserMarker.style.display = 'none'; // Initially hidden
+            
+            const browserThumbnail = document.createElement('img');
+            browserThumbnail.src = 'images/mystory/browse.png';
+            browserThumbnail.alt = 'Browser work in Perth';
+            
+            const browserPopup = document.createElement('div');
+            browserPopup.className = 'thumbnail-popup';
+            const browserPopupImg = document.createElement('img');
+            browserPopupImg.src = 'images/mystory/browse.png';
+            browserPopupImg.alt = 'Browser work in Perth';
+            browserPopup.appendChild(browserPopupImg);
+            
+            browserMarker.appendChild(browserThumbnail);
+            browserMarker.appendChild(browserPopup);
+            
+            // Add marker to map at Perth's CBD location
+            window.browserMarker = new mapboxgl.Marker({
+                element: browserMarker,
+                anchor: 'center'
+            })
+            .setLngLat([115.8605, -31.85]) // Perth CBD
+            .addTo(map);
+
+            // Add Etive marker for Perth
+            const etiveMarker = document.createElement('div');
+            etiveMarker.className = 'browser-marker';  // Reuse browser marker style
+            etiveMarker.style.display = 'none'; // Initially hidden
+            
+            const etiveThumbnail = document.createElement('img');
+            etiveThumbnail.src = 'images/mystory/etive.png';
+            etiveThumbnail.alt = 'Etive';
+            
+            const etivePopup = document.createElement('div');
+            etivePopup.className = 'thumbnail-popup';
+            const etivePopupImg = document.createElement('img');
+            etivePopupImg.src = 'images/mystory/etive.png';
+            etivePopupImg.alt = 'Etive';
+            etivePopup.appendChild(etivePopupImg);
+            
+            etiveMarker.appendChild(etiveThumbnail);
+            etiveMarker.appendChild(etivePopup);
+            
+            // Add marker to map slightly to the left of browser marker
+            window.etiveMarker = new mapboxgl.Marker({
+                element: etiveMarker,
+                anchor: 'center'
+            })
+            .setLngLat([115.8505, -31.85]) // Slightly west of browser marker
+            .addTo(map);
         });
+
+        // Function to get point along flight path
+        function getPointAlongPath(coordinates, progress) {
+            const totalSegments = coordinates.length - 1;
+            const segment = Math.floor(progress * totalSegments);
+            const segmentProgress = (progress * totalSegments) % 1;
+            
+            if (segment >= totalSegments) {
+                return coordinates[totalSegments];
+            }
+
+            const start = coordinates[segment];
+            const end = coordinates[segment + 1];
+            
+            return [
+                start[0] + (end[0] - start[0]) * segmentProgress,
+                start[1] + (end[1] - start[1]) * segmentProgress
+            ];
+        }
+
+        // Function to calculate bearing between two points
+        function getBearing(start, end) {
+            const startLat = start[1] * Math.PI / 180;
+            const startLng = start[0] * Math.PI / 180;
+            const endLat = end[1] * Math.PI / 180;
+            const endLng = end[0] * Math.PI / 180;
+
+            const y = Math.sin(endLng - startLng) * Math.cos(endLat);
+            const x = Math.cos(startLat) * Math.sin(endLat) -
+                     Math.sin(startLat) * Math.cos(endLat) * Math.cos(endLng - startLng);
+            const bearing = Math.atan2(y, x) * 180 / Math.PI;
+            
+            return bearing;
+        }
+
+        // Update flight path animation function
+        function animateFlightPath(progress) {
+            if (progress < 0.2) {  // First 20% of scroll is just zooming out
+                // Keep plane at Perth during zoom out
+                window.planeMarker
+                    .setLngLat([115.8575, -32.02])
+                    .setRotation(45);  // Initial rotation towards flight path
+
+                // Calculate zoom level during zoom out (10 to 4)
+                const zoomProgress = progress / 0.2;  // Convert to 0-1 range
+                const currentZoom = 10 - (zoomProgress * 6);  // Zoom from 10 to 4
+
+                map.easeTo({
+                    center: [115.8575, -32.02],
+                    zoom: currentZoom,
+                    duration: 0
+                });
+
+                // Clear flight path during zoom
+                if (map.getSource('flight')) {
+                    map.getSource('flight').setData({
+                        'type': 'Feature',
+                        'geometry': {
+                            'type': 'LineString',
+                            'coordinates': []
+                        }
+                    });
+                }
+                return;
+            }
+
+            // Adjust progress to start flight after zoom out
+            const adjustedProgress = (progress - 0.2) / 0.8;
+            
+            const numPoints = Math.max(2, Math.ceil(flightPath.geometry.coordinates.length * adjustedProgress));
+            const currentPath = {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'LineString',
+                    'coordinates': flightPath.geometry.coordinates.slice(0, numPoints)
+                }
+            };
+            
+            if (map.getSource('flight')) {
+                map.getSource('flight').setData(currentPath);
+                
+                // Update plane position
+                const planePosition = getPointAlongPath(flightPath.geometry.coordinates, adjustedProgress);
+                const nextPoint = getPointAlongPath(flightPath.geometry.coordinates, Math.min(1, adjustedProgress + 0.01));
+                const bearing = getBearing(planePosition, nextPoint);
+                
+                window.planeMarker
+                    .setLngLat(planePosition)
+                    .setRotation(bearing);
+
+                if (adjustedProgress >= 1) {
+                    // We've reached Oslo, start the slow zoom
+                    map.flyTo({
+                        center: [10.7522, 59.9139], // Oslo
+                        zoom: 11,
+                        duration: 10000 // 10 seconds zoom
+                    });
+                } else {
+                    // Normal flight following
+                    map.easeTo({
+                        center: planePosition,
+                        zoom: 4,
+                        duration: 0
+                    });
+                }
+            }
+        }
 
         // Initialize scrollama
         const scroller = scrollama();
@@ -428,12 +851,64 @@
                     // Update distance counter
                     const distance = calculateTotalDistance(routeCoordinates, numPoints);
                     document.getElementById('km-count').textContent = distance;
+
+                    // Show bite image between 1500km and 3500km
+                    if (distance >= 1500 && distance < 3500) {
+                        document.querySelector('.bite-overlay').classList.add('active');
+                    } else {
+                        document.querySelector('.bite-overlay').classList.remove('active');
+                    }
                 }
+            } else {
+                // Remove bite overlay when not in step 11
+                document.querySelector('.bite-overlay').classList.remove('active');
+            }
+            
+            if (step === '18') {
+                animateFlightPath(progress);
+                window.planeMarker.getElement().style.display = 'block';
+            } else {
+                window.planeMarker.getElement().style.display = 'none';
             }
         })
         .onStepEnter(response => {
             const step = response.element.dataset.step;
+            const direction = response.direction;  // 'up' or 'down'
             
+            // Handle background images and map visibility
+            if (step === '21') {
+                if (direction === 'down') {
+                    document.getElementById('map').style.opacity = 0;
+                    document.getElementById('aurora-bg').classList.add('active');
+                } else {
+                    document.getElementById('map').style.opacity = 1;
+                    document.getElementById('aurora-bg').classList.remove('active');
+                }
+                document.getElementById('bike-bg').classList.remove('active');
+                document.getElementById('snow-bg').classList.remove('active');
+            } else if (step === '22') {
+                document.getElementById('map').style.opacity = 0;
+                document.getElementById('aurora-bg').classList.remove('active');
+                document.getElementById('bike-bg').classList.add('active');
+                document.getElementById('snow-bg').classList.remove('active');
+            } else if (step === '23') {
+                document.getElementById('map').style.opacity = 0;
+                document.getElementById('aurora-bg').classList.remove('active');
+                document.getElementById('bike-bg').classList.remove('active');
+                document.getElementById('snow-bg').classList.add('active');
+            } else if (step === '24') {
+                document.getElementById('map').style.opacity = 1;
+                document.getElementById('aurora-bg').classList.remove('active');
+                document.getElementById('bike-bg').classList.remove('active');
+                document.getElementById('snow-bg').classList.remove('active');
+            } else if (step === '20') {
+                // When scrolling back to step 20, ensure map is visible
+                document.getElementById('map').style.opacity = 1;
+                document.getElementById('aurora-bg').classList.remove('active');
+                document.getElementById('bike-bg').classList.remove('active');
+                document.getElementById('snow-bg').classList.remove('active');
+            }
+
             // Show/hide distance counter
             const distanceCounter = document.querySelector('.distance-counter');
             if (step === '11') {
@@ -469,16 +944,6 @@
                 document.querySelector('.sub-overlay').classList.add('active');
             } else {
                 document.querySelector('.sub-overlay').classList.remove('active');
-            }
-            if (step === '13') {
-                document.querySelector('.queen-overlay').classList.add('active');
-            } else {
-                document.querySelector('.queen-overlay').classList.remove('active');
-            }
-            if (step === '16') {
-                document.querySelector('.etive-overlay').classList.add('active');
-            } else {
-                document.querySelector('.etive-overlay').classList.remove('active');
             }
             
             switch(step) {
@@ -529,22 +994,141 @@
                     break;
                 case '13':
                     map.flyTo({
-                        center: [115.8575, -31.9505], // Perth
-                        zoom: 11,
+                        center: [115.8575, -32.02], // Perth
+                        zoom: 10,
                         duration: 5000
                     });
+                    if (direction === 'down') {
+                        // Show Henderson marker when scrolling down
+                        if (window.hendersonMarker) {
+                            window.hendersonMarker.style.display = 'block';
+                        }
+                    } else {
+                        // Hide Henderson marker when scrolling up
+                        if (window.hendersonMarker) {
+                            window.hendersonMarker.style.display = 'none';
+                        }
+                    }
+                    // Hide other markers when entering this step
+                    if (window.browserMarker) {
+                        window.browserMarker.getElement().style.display = 'none';
+                    }
+                    if (window.etiveMarker) {
+                        window.etiveMarker.getElement().style.display = 'none';
+                    }
+                    break;
+                case '14':
+                    map.flyTo({
+                        center: [115.8575, -32.02], // Perth
+                        zoom: 10,
+                        duration: 3000
+                    });
+                    if (direction === 'down') {
+                        // Show browser marker when scrolling down
+                        if (window.browserMarker) {
+                            window.browserMarker.getElement().style.display = 'block';
+                        }
+                    } else {
+                        // Hide browser marker when scrolling up
+                        if (window.browserMarker) {
+                            window.browserMarker.getElement().style.display = 'none';
+                        }
+                    }
+                    break;
+                case '15':
+                    map.flyTo({
+                        center: [115.8575, -32.02], // Perth
+                        zoom: 10,
+                        duration: 3000
+                    });
+                    if (direction === 'down') {
+                        // Show Etive marker when scrolling down
+                        if (window.etiveMarker) {
+                            window.etiveMarker.getElement().style.display = 'block';
+                        }
+                    } else {
+                        // Hide Etive marker when scrolling up
+                        if (window.etiveMarker) {
+                            window.etiveMarker.getElement().style.display = 'none';
+                        }
+                    }
                     break;
                 case '16':
                     map.flyTo({
-                        center: [116.8456, -20], // Karratha
-                        zoom: 8,
-                        duration: 5000
+                        center: [115.8575, -32.02], // Perth
+                        zoom: 10,
+                        duration: 3000
                     });
-                    // Show platform markers and labels
-                    platforms.forEach(platform => {
-                        platform.element.style.opacity = '1';
-                        platform.popup.style.opacity = '1';
+                    break;
+                case '17':
+                    map.flyTo({
+                        center: [115.8575, -32.02], // Perth
+                        zoom: 10,
+                        duration: 3000
                     });
+                    break;
+                case '18':
+                    // Hide all markers before flight
+                    if (window.hendersonMarker) {
+                        window.hendersonMarker.style.display = 'none';
+                    }
+                    if (window.browserMarker) {
+                        window.browserMarker.getElement().style.display = 'none';
+                    }
+                    if (window.etiveMarker) {
+                        window.etiveMarker.getElement().style.display = 'none';
+                    }
+                    // Calculate the initial bearing for the flight path
+                    const initialBearing = getBearing(
+                        [115.8575, -32.02], // Perth
+                        [10.7522, 59.9139]  // Oslo
+                    );
+                    // Calculate the offset for where we'll be following the plane
+                    const bearingOffset = initialBearing % 360;
+                    const offsetX = Math.sin(bearingOffset * Math.PI / 180) * 200;
+                    const offsetY = -Math.cos(bearingOffset * Math.PI / 180) * 200;
+                    
+                    map.flyTo({
+                        center: [115.8575, -32.02], // Perth
+                        zoom: 4,
+                        offset: [0, 0],
+                        duration: 3000 // 10 seconds zoom out
+                    });
+                    break;
+                case '21':
+                    document.getElementById('aurora-bg').classList.add('active');
+                    document.getElementById('bike-bg').classList.remove('active');
+                    document.getElementById('snow-bg').classList.remove('active');
+                    break;
+                case '22':
+                    document.getElementById('aurora-bg').classList.remove('active');
+                    document.getElementById('bike-bg').classList.add('active');
+                    document.getElementById('snow-bg').classList.remove('active');
+                    break;
+                case '23':
+                    document.getElementById('aurora-bg').classList.remove('active');
+                    document.getElementById('bike-bg').classList.remove('active');
+                    document.getElementById('snow-bg').classList.add('active');
+                    break;
+                case '24':
+                    // Remove all background images
+                    document.getElementById('aurora-bg').classList.remove('active');
+                    document.getElementById('bike-bg').classList.remove('active');
+                    document.getElementById('snow-bg').classList.remove('active');
+                    // Show map again
+                    document.getElementById('map').style.opacity = 1;
+                    break;
+                case '12':
+                    // Hide all markers when entering step 12
+                    if (window.hendersonMarker) {
+                        window.hendersonMarker.style.display = 'none';
+                    }
+                    if (window.browserMarker) {
+                        window.browserMarker.getElement().style.display = 'none';
+                    }
+                    if (window.etiveMarker) {
+                        window.etiveMarker.getElement().style.display = 'none';
+                    }
                     break;
             }
         })
