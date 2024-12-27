@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>3D Name Sign Editor</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        #viewer {
+            flex: 2;
+            background-color: #f0f0f0;
+        }
+        #options {
+            flex: 1;
+            padding: 20px;
+            background-color: #ffffff;
+            overflow-y: auto;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+        }
+        .option-group {
+            margin-bottom: 20px;
+        }
+        .option-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .option-group input[type="number"],
+        .option-group select,
+        .option-group input[type="color"],
+        .option-group input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        #exportBtn {
+            width: 100%;
+            padding: 10px;
+            background-color: #4287f5;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #exportBtn:hover {
+            background-color: #306bd0;
+        }
+    </style>
+</head>
+<body>
+    <!-- 3D Viewer -->
+    <div id="viewer"></div>
+
+    <!-- Options Panel -->
+    <div id="options">
+        <div class="option-group">
+            <label for="baseWidth">Baseplate Width (mm)</label>
+            <input type="number" id="baseWidth" value="140" min="50" max="300">
+        </div>
+        <div class="option-group">
+            <label for="baseHeight">Baseplate Height (mm)</label>
+            <input type="number" id="baseHeight" value="45" min="20" max="150">
+        </div>
+        <div class="option-group">
+            <label for="baseColor">Baseplate Color</label>
+            <select id="baseColor">
+                <option value="#0088FF" selected>Blue</option>
+                <option value="#FF0000">Red</option>
+                <option value="#000000">Black</option>
+                <option value="#FFFFFF">White</option>
+            </select>
+        </div>
+        <div class="option-group">
+            <label for="signText">Sign Text</label>
+            <input type="text" id="signText" placeholder="Enter your name">
+        </div>
+        <div class="option-group">
+            <label for="fontPicker">Font</label>
+            <select id="fontPicker">
+                <option value="Arial">Arial</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Verdana">Verdana</option>
+            </select>
+        </div>
+        <div class="option-group">
+            <label for="vectorImage">Upload Vector Image (SVG)</label>
+            <input type="file" id="vectorImage" accept=".svg">
+        </div>
+        <button id="exportBtn">Export as STL</button>
+    </div>
+
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Add OrbitControls -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- Update STLExporter source -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/STLExporter.js"></script>
+
+    <script>
+        // Scene Setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xf0f0f0);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+        camera.position.set(0, 80, 80);
+        camera.lookAt(0, 0, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth * 0.66, window.innerHeight);
+        document.getElementById('viewer').appendChild(renderer.domElement);
+
+        // Lights
+        const ambientLight = new THREE.AmbientLight(0x404040);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(0, 100, 100);
+        scene.add(directionalLight);
+
+        // Add OrbitControls
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.screenSpacePanning = false;
+        controls.minDistance = 50;
+        controls.maxDistance = 400;
+        controls.maxPolarAngle = Math.PI / 2;
+
+        // Baseplate
+        let baseplate = new THREE.Mesh(
+            new THREE.BoxGeometry(140, 1, 45),
+            new THREE.MeshPhongMaterial({ color: 0x0088FF })
+        );
+        scene.add(baseplate);
+
+        // Text
+        const loader = new THREE.FontLoader();
+        let textMesh;
+        loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function(font) {
+            const textGeometry = new THREE.TextGeometry('Your Name', {
+                font: font,
+                size: 4,
+                height: 0.1,
+                curveSegments: 2,
+                bevelEnabled: true,
+                bevelThickness: 0.5,
+                bevelSize: 0.3,
+                bevelSegments: 5
+            });
+            const textMaterial = new THREE.MeshPhongMaterial({ color: 0xFFFFFF });
+            textMesh = new THREE.Mesh(textGeometry, textMaterial);
+            textGeometry.center();
+            textMesh.position.y = 1;
+            textMesh.rotation.x = -Math.PI / 2;
+            scene.add(textMesh);
+        });
+
+        // Vector Image
+        let svgMesh;
+        document.getElementById('vectorImage').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file && file.name.endsWith('.svg')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const parser = new DOMParser();
+                    const svg = parser.parseFromString(e.target.result, 'image/svg+xml').documentElement;
+
+                    const svgData = new XMLSerializer().serializeToString(svg);
+                    const texture = new THREE.TextureLoader().load('data:image/svg+xml;base64,' + btoa(svgData));
+                    texture.needsUpdate = true;
+
+                    const material = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
+                    const geometry = new THREE.PlaneGeometry(20, 20);
+                    if (svgMesh) {
+                        scene.remove(svgMesh);
+                    }
+                    svgMesh = new THREE.Mesh(geometry, material);
+                    svgMesh.position.y = 3;
+                    scene.add(svgMesh);
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        // Update Functions
+        document.getElementById('baseWidth').addEventListener('input', function() {
+            const width = parseFloat(this.value);
+            baseplate.geometry.dispose();
+            baseplate.geometry = new THREE.BoxGeometry(width, 1, baseplate.geometry.parameters.depth);
+        });
+
+        document.getElementById('baseHeight').addEventListener('input', function() {
+            const height = parseFloat(this.value);
+            baseplate.geometry.dispose();
+            baseplate.geometry = new THREE.BoxGeometry(baseplate.geometry.parameters.width, 1, height);
+        });
+
+        document.getElementById('baseColor').addEventListener('change', function() {
+            baseplate.material.color.set(this.value);
+        });
+
+        document.getElementById('signText').addEventListener('input', function() {
+            if (textMesh) {
+                scene.remove(textMesh);
+            }
+            const text = this.value || 'Your Name';
+            loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function(font) {
+                const textGeometry = new THREE.TextGeometry(text, {
+                    font: font,
+                    size: 4,
+                    height: 1,
+                    curveSegments: 12,
+                    bevelEnabled: true,
+                    bevelThickness: 0.5,
+                    bevelSize: 0.3,
+                    bevelSegments: 5
+                });
+                const selectedFont = document.getElementById('fontPicker').value;
+                textGeometry.center();
+                const textMaterial = new THREE.MeshPhongMaterial({ color: 0xFFFFFF });
+                textMesh = new THREE.Mesh(textGeometry, textMaterial);
+                textMesh.position.y = 1.5;
+                textMesh.rotation.x = -Math.PI / 2;
+                scene.add(textMesh);
+            });
+        });
+
+        document.getElementById('fontPicker').addEventListener('change', function() {
+            document.getElementById('signText').dispatchEvent(new Event('input'));
+        });
+
+        // Export Function
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            const exporter = new THREE.STLExporter();
+            const result = exporter.parse(scene);
+            const blob = new Blob([result], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'name_sign.stl';
+            link.click();
+        });
+
+        // Handle Window Resize
+        window.addEventListener('resize', function() {
+            const viewer = document.getElementById('viewer');
+            renderer.setSize(window.innerWidth * 0.66, window.innerHeight);
+            camera.aspect = (window.innerWidth * 0.66) / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Add holes function
+        function createHoles() {
+            const holeDiameter = 4; // Diameter in mm
+            const holeRadius = holeDiameter / 2; // Radius in mm (2 mm)
+
+            const holeHeight = 2; // Height of the hole; adjust as needed
+            const holeGeometry = new THREE.CylinderGeometry(holeRadius, holeRadius, holeHeight, 32);
+            const holeMaterial = new THREE.MeshPhongMaterial({ color: 0xFFFFFF });
+
+            const hole1 = new THREE.Mesh(holeGeometry, holeMaterial);
+            const hole2 = new THREE.Mesh(holeGeometry, holeMaterial);
+
+            const holeDistance = baseplate.geometry.parameters.width * 0.4;
+
+            hole1.position.set(-holeDistance / 2, 0, 0);
+            hole2.position.set(holeDistance / 2, 0, 0);
+
+            hole1.rotation.x = 0;
+            hole2.rotation.x = 0;
+
+            baseplate.add(hole1);
+            baseplate.add(hole2);
+        }
+
+        // Call createHoles after baseplate creation
+        createHoles();
+    </script>
+</body>
+</html>

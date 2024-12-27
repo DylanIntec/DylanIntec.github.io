@@ -7,6 +7,12 @@ layout: landing
 
 # Coding Projects
 
+## 3D Name Sign Editor
+
+A lightweight 3D CAD editor for designing custom 3D-printed name signs for front doors. This tool features a 3D viewer for real-time visualization and an options panel for customizing baseplate dimensions, colors, border, text, and vector images. Users can export their designs as STL files for 3D printing.
+
+[Use the 3D Name Sign Editor](name-sign-editor.html)
+
 ## My Journey
 An interactive scrollytelling experience that follows my journey from growing up in Tasmania to studying at the Australian Maritime College. Using modern web technologies to create an immersive story with maps and animations.
 
@@ -92,4 +98,6 @@ Web scraping is an essential tool for any data analysis project. The Crag is a p
 Business cards spiced up with some AR. The AR model was built using Apple's Reality Creator and is hosted on this website (Github). The QR code links to this website for easy access. The AR animation has image recognition built into it so it tracks the business card.
 
 [Link to the model...](2021-02-05-mm-bc.html)
+
+
 
