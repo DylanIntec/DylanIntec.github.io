@@ -225,23 +225,69 @@
         // Text
         const loader = new FontLoader();
         let textMesh;
-        loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function(font) {
-            const textGeometry = new TextGeometry('Your Name', {
+        let currentFont = null;
+        
+        // Font URLs
+        const fonts = {
+            'helvetiker': 'https://threejs.org/examples/fonts/helvetiker_regular.typeface.json',
+            'optimer': 'https://threejs.org/examples/fonts/optimer_regular.typeface.json',
+            'gentilis': 'https://threejs.org/examples/fonts/gentilis_regular.typeface.json',
+            'droid': 'https://threejs.org/examples/fonts/droid/droid_serif_regular.typeface.json'
+        };
+        
+        // Update font picker options
+        const fontPicker = document.getElementById('fontPicker');
+        fontPicker.innerHTML = ''; // Clear existing options
+        Object.keys(fonts).forEach(fontName => {
+            const option = document.createElement('option');
+            option.value = fontName;
+            option.textContent = fontName.charAt(0).toUpperCase() + fontName.slice(1);
+            fontPicker.appendChild(option);
+        });
+
+        function updateText(font, text) {
+            if (textMesh) {
+                scene.remove(textMesh);
+                textMesh.geometry.dispose();
+            }
+            const textGeometry = new TextGeometry(text || 'Your Name', {
                 font: font,
                 size: 4,
-                depth: 0.1,
-                curveSegments: 2,
+                depth: .1,
+                curveSegments: 12,
                 bevelEnabled: true,
                 bevelThickness: 0.5,
                 bevelSize: 0.3,
                 bevelSegments: 5
             });
+            textGeometry.center();
             const textMaterial = new THREE.MeshPhongMaterial({ color: 0xFFFFFF });
             textMesh = new THREE.Mesh(textGeometry, textMaterial);
-            textGeometry.center();
             textMesh.position.y = 1;
             textMesh.rotation.x = -Math.PI / 2;
             scene.add(textMesh);
+        }
+
+        // Load initial font
+        loader.load(fonts['helvetiker'], function(font) {
+            currentFont = font;
+            updateText(font, 'Your Name');
+        });
+        
+        // Add text update listener
+        document.getElementById('signText').addEventListener('input', function() {
+            if (currentFont) {
+                updateText(currentFont, this.value);
+            }
+        });
+        
+        // Add font change listener
+        document.getElementById('fontPicker').addEventListener('change', function() {
+            const selectedFont = this.value;
+            loader.load(fonts[selectedFont], function(font) {
+                currentFont = font;
+                updateText(font, document.getElementById('signText').value || 'Your Name');
+            });
         });
 
         // Vector Image
