@@ -95,18 +95,37 @@
     </div>
 
     <!-- Three.js Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- Add OrbitControls -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <!-- Update STLExporter source -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/STLExporter.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://threejs.org/build/three.module.js",
+                "three/addons/": "https://threejs.org/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { STLExporter } from 'three/addons/exporters/STLExporter.js';
+        import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+        import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+        import CSG from './esm/three-csg.js';
 
-    <script>
         // Scene Setup
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0xf0f0f0);
 
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+        // Create orthographic camera with suitable frustum for viewing the name sign
+        const frustumSize = 120;
+        const aspect = (window.innerWidth * 0.66) / window.innerHeight;
+        const camera = new THREE.OrthographicCamera(
+            frustumSize * aspect / -2,
+            frustumSize * aspect / 2,
+            frustumSize / 2,
+            frustumSize / -2,
+            1,
+            1000
+        );
         camera.position.set(0, 80, 80);
         camera.lookAt(0, 0, 0);
 
@@ -123,7 +142,7 @@
         scene.add(directionalLight);
 
         // Add OrbitControls
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        const controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.05;
         controls.screenSpacePanning = false;
@@ -131,21 +150,86 @@
         controls.maxDistance = 400;
         controls.maxPolarAngle = Math.PI / 2;
 
-        // Baseplate
-        let baseplate = new THREE.Mesh(
-            new THREE.BoxGeometry(140, 1, 45),
-            new THREE.MeshPhongMaterial({ color: 0x0088FF })
-        );
+        // CSG function
+        function doCSG(a, b, op, mat) {
+            a.updateMatrixWorld();
+            b.updateMatrixWorld();
+            let bspA = CSG.fromMesh(a);
+            let bspB = CSG.fromMesh(b);
+            let bspC = bspA[op](bspB);
+            let result = CSG.toMesh(bspC, a.matrix);
+            result.material = mat;
+            result.castShadow = result.receiveShadow = true;
+            return result;
+        }
+
+        // Create baseplate with holes
+        function createBaseplateWithHoles(width, height) {
+            // Create baseplate
+            const baseplate = new THREE.Mesh(
+                new THREE.BoxGeometry(width, 1, height),
+                new THREE.MeshPhongMaterial({ color: document.getElementById('baseColor').value })
+            );
+
+            // Create holes
+            const holeDiameter = 4; // 4mm diameter holes
+            const holeHeight = 2; // Make sure it's thick enough to cut through
+            const holeGeometry = new THREE.CylinderGeometry(holeDiameter/2, holeDiameter/2, holeHeight, 32);
+            const holeMaterial = new THREE.MeshPhongMaterial({ color: 0x000000 });
+
+            // Create two holes
+            const hole1 = new THREE.Mesh(holeGeometry, holeMaterial);
+            const hole2 = new THREE.Mesh(holeGeometry, holeMaterial);
+
+            // Position holes
+            const holeDistance = width * 0.8; // 80% of width
+            hole1.position.set(-holeDistance/2, 0, 0);
+            hole2.position.set(holeDistance/2, 0, 0);
+
+            // Rotate holes to be vertical
+            // hole1.rotation.x = Math.PI/2;
+            // hole2.rotation.x = Math.PI/2;
+
+            // Perform CSG operations
+            let result = doCSG(baseplate, hole1, 'subtract', baseplate.material);
+            result = doCSG(result, hole2, 'subtract', baseplate.material);
+
+            return result;
+        }
+
+        // Initial baseplate creation
+        let baseplate = createBaseplateWithHoles(140, 45);
         scene.add(baseplate);
 
+        // Update baseplate when dimensions change
+        document.getElementById('baseWidth').addEventListener('input', function() {
+            const width = parseFloat(this.value);
+            const height = parseFloat(document.getElementById('baseHeight').value);
+            scene.remove(baseplate);
+            baseplate = createBaseplateWithHoles(width, height);
+            scene.add(baseplate);
+        });
+
+        document.getElementById('baseHeight').addEventListener('input', function() {
+            const width = parseFloat(document.getElementById('baseWidth').value);
+            const height = parseFloat(this.value);
+            scene.remove(baseplate);
+            baseplate = createBaseplateWithHoles(width, height);
+            scene.add(baseplate);
+        });
+
+        document.getElementById('baseColor').addEventListener('change', function() {
+            baseplate.material.color.set(this.value);
+        });
+
         // Text
-        const loader = new THREE.FontLoader();
+        const loader = new FontLoader();
         let textMesh;
         loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function(font) {
-            const textGeometry = new THREE.TextGeometry('Your Name', {
+            const textGeometry = new TextGeometry('Your Name', {
                 font: font,
                 size: 4,
-                height: 0.1,
+                depth: 0.1,
                 curveSegments: 2,
                 bevelEnabled: true,
                 bevelThickness: 0.5,
@@ -187,56 +271,9 @@
             }
         });
 
-        // Update Functions
-        document.getElementById('baseWidth').addEventListener('input', function() {
-            const width = parseFloat(this.value);
-            baseplate.geometry.dispose();
-            baseplate.geometry = new THREE.BoxGeometry(width, 1, baseplate.geometry.parameters.depth);
-        });
-
-        document.getElementById('baseHeight').addEventListener('input', function() {
-            const height = parseFloat(this.value);
-            baseplate.geometry.dispose();
-            baseplate.geometry = new THREE.BoxGeometry(baseplate.geometry.parameters.width, 1, height);
-        });
-
-        document.getElementById('baseColor').addEventListener('change', function() {
-            baseplate.material.color.set(this.value);
-        });
-
-        document.getElementById('signText').addEventListener('input', function() {
-            if (textMesh) {
-                scene.remove(textMesh);
-            }
-            const text = this.value || 'Your Name';
-            loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function(font) {
-                const textGeometry = new THREE.TextGeometry(text, {
-                    font: font,
-                    size: 4,
-                    height: 1,
-                    curveSegments: 12,
-                    bevelEnabled: true,
-                    bevelThickness: 0.5,
-                    bevelSize: 0.3,
-                    bevelSegments: 5
-                });
-                const selectedFont = document.getElementById('fontPicker').value;
-                textGeometry.center();
-                const textMaterial = new THREE.MeshPhongMaterial({ color: 0xFFFFFF });
-                textMesh = new THREE.Mesh(textGeometry, textMaterial);
-                textMesh.position.y = 1.5;
-                textMesh.rotation.x = -Math.PI / 2;
-                scene.add(textMesh);
-            });
-        });
-
-        document.getElementById('fontPicker').addEventListener('change', function() {
-            document.getElementById('signText').dispatchEvent(new Event('input'));
-        });
-
         // Export Function
         document.getElementById('exportBtn').addEventListener('click', function() {
-            const exporter = new THREE.STLExporter();
+            const exporter = new STLExporter();
             const result = exporter.parse(scene);
             const blob = new Blob([result], { type: 'text/plain' });
             const link = document.createElement('a');
@@ -248,9 +285,17 @@
         // Handle Window Resize
         window.addEventListener('resize', function() {
             const viewer = document.getElementById('viewer');
-            renderer.setSize(window.innerWidth * 0.66, window.innerHeight);
-            camera.aspect = (window.innerWidth * 0.66) / window.innerHeight;
+            const width = window.innerWidth * 0.66;
+            const height = window.innerHeight;
+            const aspect = width / height;
+            
+            camera.left = frustumSize * aspect / -2;
+            camera.right = frustumSize * aspect / 2;
+            camera.top = frustumSize / 2;
+            camera.bottom = frustumSize / -2;
+            
             camera.updateProjectionMatrix();
+            renderer.setSize(width, height);
         });
 
         // Animation Loop
@@ -260,33 +305,6 @@
             renderer.render(scene, camera);
         }
         animate();
-
-        // Add holes function
-        function createHoles() {
-            const holeDiameter = 4; // Diameter in mm
-            const holeRadius = holeDiameter / 2; // Radius in mm (2 mm)
-
-            const holeHeight = 2; // Height of the hole; adjust as needed
-            const holeGeometry = new THREE.CylinderGeometry(holeRadius, holeRadius, holeHeight, 32);
-            const holeMaterial = new THREE.MeshPhongMaterial({ color: 0xFFFFFF });
-
-            const hole1 = new THREE.Mesh(holeGeometry, holeMaterial);
-            const hole2 = new THREE.Mesh(holeGeometry, holeMaterial);
-
-            const holeDistance = baseplate.geometry.parameters.width * 0.4;
-
-            hole1.position.set(-holeDistance / 2, 0, 0);
-            hole2.position.set(holeDistance / 2, 0, 0);
-
-            hole1.rotation.x = 0;
-            hole2.rotation.x = 0;
-
-            baseplate.add(hole1);
-            baseplate.add(hole2);
-        }
-
-        // Call createHoles after baseplate creation
-        createHoles();
     </script>
 </body>
 </html>
