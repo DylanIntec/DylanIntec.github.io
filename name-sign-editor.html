@@ -66,6 +66,16 @@
             <input type="number" id="baseHeight" value="45" min="20" max="150">
         </div>
         <div class="option-group">
+            <label>
+                <input type="checkbox" id="showHoles" checked>
+                Mounting Holes
+            </label>
+        </div>
+        <div class="option-group">
+            <label for="holeSpacing">Hole Spacing (mm)</label>
+            <input type="number" id="holeSpacing" value="112" min="20" max="250" step="1">
+        </div>
+        <div class="option-group">
             <label for="baseColor">Baseplate Color</label>
             <select id="baseColor">
                 <option value="#0088FF" selected>Blue</option>
@@ -216,33 +226,34 @@
             // Create the border using CSG subtract
             const border = doCSG(outerBox, innerBox, 'subtract', borderMaterial);
 
-            // Create holes
-            const holeDiameter = 4; // 4mm diameter holes
-            const holeHeight = 4; // Make it thicker to ensure clean cut
-            const holeGeometry = new THREE.CylinderGeometry(holeDiameter/2, holeDiameter/2, holeHeight, 64, 1, false);
-            const holeMaterial = new THREE.MeshPhongMaterial({ color: 0x000000 });
+            let finalBaseplate = baseplate;
+            
+            // Only create holes if checkbox is checked
+            if (document.getElementById('showHoles').checked) {
+                // Create holes
+                const holeDiameter = 4; // 4mm diameter holes
+                const holeHeight = 4; // Make it thicker to ensure clean cut
+                const holeGeometry = new THREE.CylinderGeometry(holeDiameter/2, holeDiameter/2, holeHeight, 64, 1, false);
+                const holeMaterial = new THREE.MeshPhongMaterial({ color: 0x000000 });
 
-            // Create two holes
-            const hole1 = new THREE.Mesh(holeGeometry, holeMaterial);
-            const hole2 = new THREE.Mesh(holeGeometry, holeMaterial);
+                // Create two holes
+                const hole1 = new THREE.Mesh(holeGeometry, holeMaterial);
+                const hole2 = new THREE.Mesh(holeGeometry, holeMaterial);
 
-            // Position holes
-            const holeDistance = width * 0.8; // 80% of width
-            hole1.position.set(-holeDistance/2, -holeHeight/4, 0);
-            hole2.position.set(holeDistance/2, -holeHeight/4, 0);
+                // Position holes
+                const holeDistance = parseFloat(document.getElementById('holeSpacing').value);
+                hole1.position.set(-holeDistance/2, -holeHeight/4, 0);
+                hole2.position.set(holeDistance/2, -holeHeight/4, 0);
 
-            // Rotate holes to be vertical
-            hole1.rotation.x = -Math.PI/2;
-            hole2.rotation.x = -Math.PI/2;
+                // Update matrices before CSG operation
+                baseplate.updateMatrix();
+                hole1.updateMatrix();
+                hole2.updateMatrix();
 
-            // Update matrices before CSG operation
-            baseplate.updateMatrix();
-            hole1.updateMatrix();
-            hole2.updateMatrix();
-
-            // Perform CSG operations for holes
-            const baseplateWithHoles = doCSG(baseplate, hole1, 'subtract', baseplate.material);
-            const finalBaseplate = doCSG(baseplateWithHoles, hole2, 'subtract', baseplate.material);
+                // Perform CSG operations for holes
+                const baseplateWithHoles = doCSG(baseplate, hole1, 'subtract', baseplate.material);
+                finalBaseplate = doCSG(baseplateWithHoles, hole2, 'subtract', baseplate.material);
+            }
 
             scene.add(finalBaseplate);
             scene.add(border);
@@ -441,6 +452,38 @@
             // Update border color
             if (border && border.material) {
                 border.material.color.set(color);
+            }
+        });
+
+        // Add hole controls listeners
+        document.getElementById('showHoles').addEventListener('change', function() {
+            const width = parseFloat(document.getElementById('baseWidth').value);
+            const height = parseFloat(document.getElementById('baseHeight').value);
+            scene.remove(baseplate);
+            scene.remove(border);
+            if (textMesh) scene.remove(textMesh);
+            parts = createBaseplateWithHoles(width, height);
+            baseplate = parts.baseplate;
+            border = parts.border;
+            if (currentFont) {
+                updateText(currentFont, document.getElementById('signText').value || 'Your Name');
+            }
+            // Show/hide hole spacing control based on checkbox
+            document.getElementById('holeSpacing').parentElement.style.display = 
+                this.checked ? 'block' : 'none';
+        });
+        
+        document.getElementById('holeSpacing').addEventListener('input', function() {
+            const width = parseFloat(document.getElementById('baseWidth').value);
+            const height = parseFloat(document.getElementById('baseHeight').value);
+            scene.remove(baseplate);
+            scene.remove(border);
+            if (textMesh) scene.remove(textMesh);
+            parts = createBaseplateWithHoles(width, height);
+            baseplate = parts.baseplate;
+            border = parts.border;
+            if (currentFont) {
+                updateText(currentFont, document.getElementById('signText').value || 'Your Name');
             }
         });
     </script>
