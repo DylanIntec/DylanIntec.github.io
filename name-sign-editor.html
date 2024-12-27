@@ -129,7 +129,7 @@
     <script type="module">
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-        import { STLExporter } from 'three/addons/exporters/STLExporter.js';
+        import { OBJExporter } from 'three/addons/exporters/OBJExporter.js';
         import { FontLoader } from 'three/addons/loaders/FontLoader.js';
         import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
         import CSG from './esm/three-csg.js';
@@ -409,13 +409,59 @@
 
         // Export Function
         document.getElementById('exportBtn').addEventListener('click', function() {
-            const exporter = new STLExporter();
-            const result = exporter.parse(scene);
-            const blob = new Blob([result], { type: 'text/plain' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'name_sign.stl';
-            link.click();
+            const exporter = new OBJExporter();
+            
+            // Store original rotations
+            const originalRotations = new Map();
+            scene.traverse((object) => {
+                if (object.isMesh) {
+                    originalRotations.set(object, object.rotation.x);
+                    object.rotation.x += Math.PI/2;
+                }
+            }); 
+            
+            // Create a header with material definitions
+            let mtlHeader = '';
+            const materials = new Set();
+            
+            scene.traverse((object) => {
+                if (object.isMesh && object.material) {
+                    const material = object.material;
+                    const matName = `material_${material.color.getHexString()}`;
+                    if (!materials.has(matName)) {
+                        materials.add(matName);
+                        mtlHeader += `newmtl ${matName}\n`;
+                        mtlHeader += `Kd ${material.color.r} ${material.color.g} ${material.color.b}\n`;
+                    }
+                    // Assign material name to the mesh
+                    object.material.name = matName;
+                }
+            });
+            
+            // Export OBJ with materials
+            const objData = exporter.parse(scene);
+            const finalData = `mtllib name_sign.mtl\n${objData}`;
+            
+            // Restore original rotations
+            scene.traverse((object) => {
+                if (object.isMesh) {
+                    object.rotation.x = originalRotations.get(object);
+                }
+            });
+            
+            // Save OBJ file
+            const objBlob = new Blob([finalData], { type: 'text/plain' });
+            const objLink = document.createElement('a');
+            objLink.href = URL.createObjectURL(objBlob);
+            objLink.download = 'name_sign.obj';
+            objLink.click();
+            
+            // Save MTL file
+            const mtlBlob = new Blob([mtlHeader], { type: 'text/plain' });
+            const mtlLink = document.createElement('a');
+            mtlLink.href = URL.createObjectURL(mtlBlob);
+            mtlLink.download = 'name_sign.mtl';
+            mtlLink.click();
         });
 
         // Handle Window Resize
