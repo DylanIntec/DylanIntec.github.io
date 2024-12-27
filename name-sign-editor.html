@@ -75,6 +75,15 @@
             </select>
         </div>
         <div class="option-group">
+            <label for="borderColor">Border & Text Color</label>
+            <select id="borderColor">
+                <option value="#FFFFFF" selected>White</option>
+                <option value="#FF0000">Red</option>
+                <option value="#000000">Black</option>
+                <option value="#0088FF">Blue</option>
+            </select>
+        </div>
+        <div class="option-group">
             <label for="signText">Sign Text</label>
             <input type="text" id="signText" placeholder="Enter your name">
         </div>
@@ -86,6 +95,10 @@
                 <option value="Courier New">Courier New</option>
                 <option value="Verdana">Verdana</option>
             </select>
+        </div>
+        <div class="option-group">
+            <label for="textSize">Text Size (mm)</label>
+            <input type="number" id="textSize" value="30" min="20" max="45" step="1">
         </div>
         <div class="option-group">
             <label for="vectorImage">Upload Vector Image (SVG)</label>
@@ -171,10 +184,42 @@
                 new THREE.MeshPhongMaterial({ color: document.getElementById('baseColor').value })
             );
 
+            // Create border
+            const borderWidth = 1; // 1mm wide
+            const borderHeight = 1; // 1mm high
+            const borderOffset = 1; // 1mm offset from edge
+            
+            // Create border material with its own color
+            const borderMaterial = new THREE.MeshPhongMaterial({ 
+                color: document.getElementById('borderColor').value 
+            });
+            
+            // Create outer and inner box for the border
+            const outerWidth = width - 2 * borderOffset;
+            const outerHeight = height - 2 * borderOffset;
+            const innerWidth = outerWidth - 2 * borderWidth;
+            const innerHeight = outerHeight - 2 * borderWidth;
+            
+            const outerBox = new THREE.Mesh(
+                new THREE.BoxGeometry(outerWidth, borderHeight, outerHeight),
+                borderMaterial
+            );
+            const innerBox = new THREE.Mesh(
+                new THREE.BoxGeometry(innerWidth, borderHeight * 1.1, innerHeight),
+                borderMaterial
+            );
+            
+            // Position the border on top of the baseplate
+            outerBox.position.y = 0.5 + borderHeight/2;
+            innerBox.position.y = 0.5 + borderHeight/2;
+            
+            // Create the border using CSG subtract
+            const border = doCSG(outerBox, innerBox, 'subtract', borderMaterial);
+
             // Create holes
             const holeDiameter = 4; // 4mm diameter holes
-            const holeHeight = 2; // Make sure it's thick enough to cut through
-            const holeGeometry = new THREE.CylinderGeometry(holeDiameter/2, holeDiameter/2, holeHeight, 32);
+            const holeHeight = 4; // Make it thicker to ensure clean cut
+            const holeGeometry = new THREE.CylinderGeometry(holeDiameter/2, holeDiameter/2, holeHeight, 64, 1, false);
             const holeMaterial = new THREE.MeshPhongMaterial({ color: 0x000000 });
 
             // Create two holes
@@ -183,43 +228,67 @@
 
             // Position holes
             const holeDistance = width * 0.8; // 80% of width
-            hole1.position.set(-holeDistance/2, 0, 0);
-            hole2.position.set(holeDistance/2, 0, 0);
+            hole1.position.set(-holeDistance/2, -holeHeight/4, 0);
+            hole2.position.set(holeDistance/2, -holeHeight/4, 0);
 
             // Rotate holes to be vertical
-            // hole1.rotation.x = Math.PI/2;
-            // hole2.rotation.x = Math.PI/2;
+            hole1.rotation.x = -Math.PI/2;
+            hole2.rotation.x = -Math.PI/2;
 
-            // Perform CSG operations
-            let result = doCSG(baseplate, hole1, 'subtract', baseplate.material);
-            result = doCSG(result, hole2, 'subtract', baseplate.material);
+            // Update matrices before CSG operation
+            baseplate.updateMatrix();
+            hole1.updateMatrix();
+            hole2.updateMatrix();
 
-            return result;
+            // Perform CSG operations for holes
+            const baseplateWithHoles = doCSG(baseplate, hole1, 'subtract', baseplate.material);
+            const finalBaseplate = doCSG(baseplateWithHoles, hole2, 'subtract', baseplate.material);
+
+            scene.add(finalBaseplate);
+            scene.add(border);
+
+            return { baseplate: finalBaseplate, border: border };
         }
 
         // Initial baseplate creation
-        let baseplate = createBaseplateWithHoles(140, 45);
-        scene.add(baseplate);
+        let parts = createBaseplateWithHoles(140, 45);
+        let baseplate = parts.baseplate;
+        let border = parts.border;
 
         // Update baseplate when dimensions change
         document.getElementById('baseWidth').addEventListener('input', function() {
             const width = parseFloat(this.value);
             const height = parseFloat(document.getElementById('baseHeight').value);
             scene.remove(baseplate);
-            baseplate = createBaseplateWithHoles(width, height);
-            scene.add(baseplate);
+            scene.remove(border);
+            if (textMesh) scene.remove(textMesh);
+            parts = createBaseplateWithHoles(width, height);
+            baseplate = parts.baseplate;
+            border = parts.border;
+            if (currentFont) {
+                updateText(currentFont, document.getElementById('signText').value || 'Your Name');
+            }
         });
 
         document.getElementById('baseHeight').addEventListener('input', function() {
             const width = parseFloat(document.getElementById('baseWidth').value);
             const height = parseFloat(this.value);
             scene.remove(baseplate);
-            baseplate = createBaseplateWithHoles(width, height);
-            scene.add(baseplate);
+            scene.remove(border);
+            if (textMesh) scene.remove(textMesh);
+            parts = createBaseplateWithHoles(width, height);
+            baseplate = parts.baseplate;
+            border = parts.border;
+            if (currentFont) {
+                updateText(currentFont, document.getElementById('signText').value || 'Your Name');
+            }
         });
 
+        // Update base color
         document.getElementById('baseColor').addEventListener('change', function() {
-            baseplate.material.color.set(this.value);
+            if (baseplate && baseplate.material) {
+                baseplate.material.color.set(this.value);
+            }
         });
 
         // Text
@@ -250,9 +319,10 @@
                 scene.remove(textMesh);
                 textMesh.geometry.dispose();
             }
+            const textSize = parseFloat(document.getElementById('textSize').value) / 5; // Convert mm to units
             const textGeometry = new TextGeometry(text || 'Your Name', {
                 font: font,
-                size: 4,
+                size: textSize,
                 depth: .1,
                 curveSegments: 12,
                 bevelEnabled: true,
@@ -261,7 +331,9 @@
                 bevelSegments: 5
             });
             textGeometry.center();
-            const textMaterial = new THREE.MeshPhongMaterial({ color: 0xFFFFFF });
+            const textMaterial = new THREE.MeshPhongMaterial({ 
+                color: document.getElementById('borderColor').value 
+            });
             textMesh = new THREE.Mesh(textGeometry, textMaterial);
             textMesh.position.y = 1;
             textMesh.rotation.x = -Math.PI / 2;
@@ -278,6 +350,13 @@
         document.getElementById('signText').addEventListener('input', function() {
             if (currentFont) {
                 updateText(currentFont, this.value);
+            }
+        });
+        
+        // Add text size update listener
+        document.getElementById('textSize').addEventListener('input', function() {
+            if (currentFont) {
+                updateText(currentFont, document.getElementById('signText').value || 'Your Name');
             }
         });
         
@@ -351,6 +430,19 @@
             renderer.render(scene, camera);
         }
         animate();
+
+        // Add border color update listener
+        document.getElementById('borderColor').addEventListener('change', function() {
+            const color = this.value;
+            // Update text color if it exists
+            if (textMesh) {
+                textMesh.material.color.set(color);
+            }
+            // Update border color
+            if (border && border.material) {
+                border.material.color.set(color);
+            }
+        });
     </script>
 </body>
 </html>
