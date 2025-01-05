@@ -49,6 +49,38 @@
         #exportBtn:hover {
             background-color: #306bd0;
         }
+        .style-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .style-option {
+            flex: 1;
+            position: relative;
+            cursor: pointer;
+        }
+        .style-option input[type="radio"] {
+            display: none;
+        }
+        .style-option label {
+            display: block;
+            padding: 10px;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .style-option img {
+            width: 100%;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 5px;
+        }
+        .style-option input[type="radio"]:checked + label {
+            border-color: #4287f5;
+            background-color: #f0f7ff;
+        }
     </style>
 </head>
 <body>
@@ -57,6 +89,32 @@
 
     <!-- Options Panel -->
     <div id="options">
+        <div class="option-group">
+            <label>Style</label>
+            <div class="style-selector">
+                <div class="style-option">
+                    <input type="radio" id="style-normal" name="style" value="normal" checked>
+                    <label for="style-normal">
+                        <img src="./images/styles/normal.png" alt="Normal Style">
+                        Normal
+                    </label>
+                </div>
+                <div class="style-option">
+                    <input type="radio" id="style-christmas" name="style" value="christmas">
+                    <label for="style-christmas">
+                        <img src="./images/styles/christmas.png" alt="Christmas Style">
+                        Christmas
+                    </label>
+                </div>
+                <div class="style-option">
+                    <input type="radio" id="style-easter" name="style" value="easter">
+                    <label for="style-easter">
+                        <img src="./images/styles/easter.png" alt="Easter Style">
+                        Easter
+                    </label>
+                </div>
+            </div>
+        </div>
         <div class="option-group">
             <label for="baseWidth">Baseplate Width (mm)</label>
             <input type="number" id="baseWidth" value="140" min="50" max="300">
@@ -130,6 +188,7 @@
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
         import { OBJExporter } from 'three/addons/exporters/OBJExporter.js';
+        import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
         import { FontLoader } from 'three/addons/loaders/FontLoader.js';
         import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
         import CSG from './esm/three-csg.js';
@@ -266,6 +325,65 @@
         let baseplate = parts.baseplate;
         let border = parts.border;
 
+        // Load snowman model
+        const objLoader = new OBJLoader();
+        let snowmanMesh = null;
+        objLoader.load('./images/styles/snowman.obj', function(object) {
+            snowmanMesh = object;
+            snowmanMesh.traverse(function(child) {
+                if (child.isMesh) {
+                    child.material = new THREE.MeshPhongMaterial({ color: 0xFFFFFF });
+                }
+            });
+            // position the snowman but don't add to scene yet
+            snowmanMesh.position.set(1, 0.5, 15);  // Left side of the sign
+        });
+
+        // Style change handler
+        document.querySelectorAll('input[name="style"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const style = this.value;
+                // Remove snowman if it's in the scene
+                if (snowmanMesh && snowmanMesh.parent) {
+                    scene.remove(snowmanMesh);
+                }
+
+                switch(style) {
+                    case 'normal':
+                        // Default style - blue base, white border
+                        document.getElementById('baseColor').value = '#0088FF';  // Blue
+                        document.getElementById('borderColor').value = '#FFFFFF'; // White
+                        baseplate.material.color.setHex(0x0088FF);
+                        if (border) border.material.color.setHex(0xFFFFFF);
+                        if (textMesh) textMesh.material.color.setHex(0xFFFFFF);
+                        break;
+                    case 'christmas':
+                        // Christmas theme - red base, white border
+                        document.getElementById('baseColor').value = '#FF0000';  // Red
+                        document.getElementById('borderColor').value = '#FFFFFF'; // White
+                        baseplate.material.color.setHex(0xFF0000);
+                        if (border) border.material.color.setHex(0xFFFFFF);
+                        if (textMesh) textMesh.material.color.setHex(0xFFFFFF);
+                        // Add snowman to the scene
+                        if (snowmanMesh) {
+                            // Update snowman position based on current baseplate width
+                            const width = parseFloat(document.getElementById('baseWidth').value);
+                            snowmanMesh.position.x = -width/2.5;  // Position at 1/3 from the left edge
+                            scene.add(snowmanMesh);
+                        }
+                        break;
+                    case 'easter':
+                        // Easter theme - white base, blue border
+                        document.getElementById('baseColor').value = '#FFFFFF';  // White
+                        document.getElementById('borderColor').value = '#0088FF'; // Blue
+                        baseplate.material.color.setHex(0xFFFFFF);
+                        if (border) border.material.color.setHex(0x0088FF);
+                        if (textMesh) textMesh.material.color.setHex(0x0088FF);
+                        break;
+                }
+            });
+        });
+
         // Update baseplate when dimensions change
         document.getElementById('baseWidth').addEventListener('input', function() {
             const width = parseFloat(this.value);
@@ -278,6 +396,10 @@
             border = parts.border;
             if (currentFont) {
                 updateText(currentFont, document.getElementById('signText').value || 'Your Name');
+            }
+            // Update snowman position if it's in the scene
+            if (snowmanMesh && snowmanMesh.parent) {
+                snowmanMesh.position.x = -width/2.5;
             }
         });
 
