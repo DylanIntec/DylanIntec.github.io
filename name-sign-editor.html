@@ -153,7 +153,7 @@
         </div>
         <div class="option-group">
             <label for="signText">Sign Text</label>
-            <input type="text" id="signText" placeholder="Enter your name">
+            <input type="text" id="signText" placeholder="">
         </div>
         <div class="option-group">
             <label for="fontPicker">Font</label>
@@ -180,7 +180,9 @@
         {
             "imports": {
                 "three": "https://threejs.org/build/three.module.js",
-                "three/addons/": "https://threejs.org/examples/jsm/"
+                "three/addons/": "https://threejs.org/examples/jsm/",
+                "three/addons/libs/": "https://threejs.org/examples/jsm/libs/",
+                "three/addons/utils/": "https://threejs.org/examples/jsm/utils/"
             }
         }
     </script>
@@ -191,6 +193,7 @@
         import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
         import { FontLoader } from 'three/addons/loaders/FontLoader.js';
         import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+        import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
         import CSG from './esm/three-csg.js';
 
         // Scene Setup
@@ -263,36 +266,56 @@
                 color: document.getElementById('borderColor').value 
             });
             
-            // Create outer and inner box for the border
-            const outerWidth = width - 2 * borderOffset;
-            const outerHeight = height - 2 * borderOffset;
-            const innerWidth = outerWidth - 2 * borderWidth;
-            const innerHeight = outerHeight - 2 * borderWidth;
-            
-            const outerBox = new THREE.Mesh(
-                new THREE.BoxGeometry(outerWidth, borderHeight, outerHeight),
+            // Create four border pieces
+            const topBorder = new THREE.Mesh(
+                new THREE.BoxGeometry(width - 2 * borderOffset, borderHeight, borderWidth),
                 borderMaterial
             );
-            const innerBox = new THREE.Mesh(
-                new THREE.BoxGeometry(innerWidth, borderHeight * 1.1, innerHeight),
+            const bottomBorder = new THREE.Mesh(
+                new THREE.BoxGeometry(width - 2 * borderOffset, borderHeight, borderWidth),
                 borderMaterial
             );
-            
-            // Position the border on top of the baseplate
-            outerBox.position.y = 0.5 + borderHeight/2;
-            innerBox.position.y = 0.5 + borderHeight/2;
-            
-            // Create the border using CSG subtract
-            const border = doCSG(outerBox, innerBox, 'subtract', borderMaterial);
+            const leftBorder = new THREE.Mesh(
+                new THREE.BoxGeometry(borderWidth, borderHeight, height - 2 * borderOffset),
+                borderMaterial
+            );
+            const rightBorder = new THREE.Mesh(
+                new THREE.BoxGeometry(borderWidth, borderHeight, height - 2 * borderOffset),
+                borderMaterial
+            );
 
-            let finalBaseplate = baseplate;
+            // Position the borders
+            topBorder.position.set(0, 0.5 + borderHeight/2, height/2 - borderOffset);
+            bottomBorder.position.set(0, 0.5 + borderHeight/2, -height/2 + borderOffset);
+            leftBorder.position.set(-width/2 + borderOffset, 0.5 + borderHeight/2, 0);
+            rightBorder.position.set(width/2 - borderOffset, 0.5 + borderHeight/2, 0);
+
+            // Update matrices before CSG
+            baseplate.updateMatrix();
+            topBorder.updateMatrix();
+            bottomBorder.updateMatrix();
+            leftBorder.updateMatrix();
+            rightBorder.updateMatrix();
+
+            // Combine all borders using CSG union
+            let combinedMesh = doCSG(baseplate, topBorder, 'union', baseplate.material);
+            combinedMesh = doCSG(combinedMesh, bottomBorder, 'union', baseplate.material);
+            combinedMesh = doCSG(combinedMesh, leftBorder, 'union', baseplate.material);
+            combinedMesh = doCSG(combinedMesh, rightBorder, 'union', baseplate.material);
             
             // Only create holes if checkbox is checked
             if (document.getElementById('showHoles').checked) {
                 // Create holes
                 const holeDiameter = 4; // 4mm diameter holes
-                const holeHeight = 4; // Make it thicker to ensure clean cut
-                const holeGeometry = new THREE.CylinderGeometry(holeDiameter/2, holeDiameter/2, holeHeight, 64, 1, false);
+                const holeHeight = 6; // Increased to ensure complete penetration
+                const holeGeometry = new THREE.CylinderGeometry(
+                    holeDiameter/2,    // radius top
+                    holeDiameter/2,    // radius bottom
+                    holeHeight,        // height
+                    32,                // radialSegments (increased from default)
+                    4,                 // heightSegments (increased)
+                    false              // openEnded
+                );
                 const holeMaterial = new THREE.MeshPhongMaterial({ color: 0x000000 });
 
                 // Create two holes
@@ -305,19 +328,36 @@
                 hole2.position.set(holeDistance/2, -holeHeight/4, 0);
 
                 // Update matrices before CSG operation
-                baseplate.updateMatrix();
                 hole1.updateMatrix();
                 hole2.updateMatrix();
 
                 // Perform CSG operations for holes
-                const baseplateWithHoles = doCSG(baseplate, hole1, 'subtract', baseplate.material);
-                finalBaseplate = doCSG(baseplateWithHoles, hole2, 'subtract', baseplate.material);
+                combinedMesh = doCSG(combinedMesh, hole1, 'subtract', baseplate.material);
+                combinedMesh = doCSG(combinedMesh, hole2, 'subtract', baseplate.material);
             }
 
-            scene.add(finalBaseplate);
-            scene.add(border);
+            // Apply vertex colors based on height
+            const positions = combinedMesh.geometry.attributes.position.array;
+            const colors = new Float32Array(positions.length);
+            const baseColor = new THREE.Color(document.getElementById('baseColor').value);
+            const borderColor = new THREE.Color(document.getElementById('borderColor').value);
+            
+            for (let i = 0; i < positions.length; i += 3) {
+                const y = positions[i + 1];
+                const color = y > 0.75 ? borderColor : baseColor;
+                colors[i] = color.r;
+                colors[i + 1] = color.g;
+                colors[i + 2] = color.b;
+            }
+            
+            combinedMesh.geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            combinedMesh.material = new THREE.MeshPhongMaterial({
+                vertexColors: true,
+                shininess: 60
+            });
 
-            return { baseplate: finalBaseplate, border: border };
+            scene.add(combinedMesh);
+            return { baseplate: combinedMesh, border: null };
         }
 
         // Initial baseplate creation
@@ -368,7 +408,7 @@
                         if (snowmanMesh) {
                             // Update snowman position based on current baseplate width
                             const width = parseFloat(document.getElementById('baseWidth').value);
-                            snowmanMesh.position.x = -width/2.5;  // Position at 1/3 from the left edge
+                            snowmanMesh.position.x = -width/3;  // Position at 1/3 from the left edge
                             scene.add(snowmanMesh);
                         }
                         break;
@@ -395,11 +435,11 @@
             baseplate = parts.baseplate;
             border = parts.border;
             if (currentFont) {
-                updateText(currentFont, document.getElementById('signText').value || 'Your Name');
+                updateText(currentFont, document.getElementById('signText').value || '');
             }
             // Update snowman position if it's in the scene
             if (snowmanMesh && snowmanMesh.parent) {
-                snowmanMesh.position.x = -width/2.5;
+                snowmanMesh.position.x = -width/3;
             }
         });
 
@@ -413,7 +453,7 @@
             baseplate = parts.baseplate;
             border = parts.border;
             if (currentFont) {
-                updateText(currentFont, document.getElementById('signText').value || 'Your Name');
+                updateText(currentFont, document.getElementById('signText').value || '');
             }
         });
 
@@ -453,15 +493,15 @@
                 textMesh.geometry.dispose();
             }
             const textSize = parseFloat(document.getElementById('textSize').value) / 5; // Convert mm to units
-            const textGeometry = new TextGeometry(text || 'Your Name', {
+            const textGeometry = new TextGeometry(text || '', {
                 font: font,
                 size: textSize,
-                depth: .1,
-                curveSegments: 12,
+                depth: 2,             // Changed from height to depth for better 3D printing
+                curveSegments: 32,     // Increased from 12 for smoother curves
                 bevelEnabled: true,
-                bevelThickness: 0.5,
-                bevelSize: 0.3,
-                bevelSegments: 5
+                bevelThickness: 0.3,   // Slightly reduced for cleaner edges
+                bevelSize: 0.2,        // Slightly reduced for cleaner edges
+                bevelSegments: 16      // Increased for smoother bevels
             });
             textGeometry.center();
             const textMaterial = new THREE.MeshPhongMaterial({ 
@@ -476,7 +516,7 @@
         // Load initial font
         loader.load(fonts['helvetiker'], function(font) {
             currentFont = font;
-            updateText(font, 'Your Name');
+            updateText(font, '');
         });
         
         // Add text update listener
@@ -489,7 +529,7 @@
         // Add text size update listener
         document.getElementById('textSize').addEventListener('input', function() {
             if (currentFont) {
-                updateText(currentFont, document.getElementById('signText').value || 'Your Name');
+                updateText(currentFont, document.getElementById('signText').value || '');
             }
         });
         
@@ -498,7 +538,7 @@
             const selectedFont = this.value;
             loader.load(fonts[selectedFont], function(font) {
                 currentFont = font;
-                updateText(font, document.getElementById('signText').value || 'Your Name');
+                updateText(font, document.getElementById('signText').value || '');
             });
         });
 
@@ -533,58 +573,57 @@
         document.getElementById('exportBtn').addEventListener('click', function() {
             const exporter = new OBJExporter();
             
-            // Store original rotations
-            const originalRotations = new Map();
+            // Create a temporary scene for export
+            const exportScene = new THREE.Scene();
+            
+            
+
+            // Clone and prepare objects for export
             scene.traverse((object) => {
                 if (object.isMesh) {
-                    originalRotations.set(object, object.rotation.x);
-                    object.rotation.x += Math.PI/2;
-                }
-            }); 
-            
-            // Create a header with material definitions
-            let mtlHeader = '';
-            const materials = new Set();
-            
-            scene.traverse((object) => {
-                if (object.isMesh && object.material) {
-                    const material = object.material;
-                    const matName = `material_${material.color.getHexString()}`;
-                    if (!materials.has(matName)) {
-                        materials.add(matName);
-                        mtlHeader += `newmtl ${matName}\n`;
-                        mtlHeader += `Kd ${material.color.r} ${material.color.g} ${material.color.b}\n`;
+                    const clone = object.clone();
+                    
+                    // Optimize geometry
+                    if (clone.geometry) {
+                        clone.geometry = clone.geometry.clone();
+                        clone.geometry = BufferGeometryUtils.mergeVertices(clone.geometry);
+                        clone.geometry.computeVertexNormals();
+                        clone.geometry.normalizeNormals();
                     }
-                    // Assign material name to the mesh
-                    object.material.name = matName;
+                    
+                    // Special handling for text mesh
+                    if (object === textMesh) {
+                        // For text, we need to rotate around Z instead of X to maintain orientation
+                        // clone.rotation.z = Math.PI/2;
+                        clone.rotation.x = Math.PI/2;
+                    } else {
+                        // For baseplate and other objects, rotate around X
+                        clone.rotation.x = Math.PI/2;
+                    }
+                    clone.updateMatrix();
+                    
+                    // Apply transformations to geometry
+                    clone.geometry.applyMatrix4(clone.matrix);
+                    clone.position.set(0, 0, 0);
+                    clone.rotation.set(0, 0, 0);
+                    clone.scale.set(1, 1, 1);
+                    clone.updateMatrix();
+                    
+                    exportScene.add(clone);
                 }
             });
-            
-            // Export OBJ with materials
-            const objData = exporter.parse(scene);
-            const finalData = `mtllib name_sign.mtl\n${objData}`;
-            
-            // Restore original rotations
-            scene.traverse((object) => {
-                if (object.isMesh) {
-                    object.rotation.x = originalRotations.get(object);
-                }
-            });
-            
-            // Save OBJ file
-            const objBlob = new Blob([finalData], { type: 'text/plain' });
-            const objLink = document.createElement('a');
-            objLink.href = URL.createObjectURL(objBlob);
-            objLink.download = 'name_sign.obj';
-            objLink.click();
-            
-            // Save MTL file
-            const mtlBlob = new Blob([mtlHeader], { type: 'text/plain' });
-            const mtlLink = document.createElement('a');
-            mtlLink.href = URL.createObjectURL(mtlBlob);
-            mtlLink.download = 'name_sign.mtl';
-            mtlLink.click();
+
+            // Export to OBJ
+            const result = exporter.parse(exportScene);
+            const blob = new Blob([result], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'name_sign.obj';
+            link.click();
         });
+
+        // Update button text
+        document.getElementById('exportBtn').textContent = 'Export as OBJ';
 
         // Handle Window Resize
         window.addEventListener('resize', function() {
@@ -617,9 +656,15 @@
             if (textMesh) {
                 textMesh.material.color.set(color);
             }
-            // Update border color
-            if (border && border.material) {
-                border.material.color.set(color);
+            // Recreate the entire baseplate with new border color
+            const width = parseFloat(document.getElementById('baseWidth').value);
+            const height = parseFloat(document.getElementById('baseHeight').value);
+            scene.remove(baseplate);
+            if (textMesh) scene.remove(textMesh);
+            parts = createBaseplateWithHoles(width, height);
+            baseplate = parts.baseplate;
+            if (currentFont) {
+                updateText(currentFont, document.getElementById('signText').value || '');
             }
         });
 
@@ -634,7 +679,7 @@
             baseplate = parts.baseplate;
             border = parts.border;
             if (currentFont) {
-                updateText(currentFont, document.getElementById('signText').value || 'Your Name');
+                updateText(currentFont, document.getElementById('signText').value || '');
             }
             // Show/hide hole spacing control based on checkbox
             document.getElementById('holeSpacing').parentElement.style.display = 
@@ -651,7 +696,7 @@
             baseplate = parts.baseplate;
             border = parts.border;
             if (currentFont) {
-                updateText(currentFont, document.getElementById('signText').value || 'Your Name');
+                updateText(currentFont, document.getElementById('signText').value || '');
             }
         });
     </script>
