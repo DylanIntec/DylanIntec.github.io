@@ -2946,7 +2946,7 @@ ${r}<|im_end|>
 
     <section class="panel">
       <label class="file-label">
-        <input type="file" id="file" accept=".json,application/json" />
+        <input type="file" id="file" accept=".json,application/json,text/plain" />
         <span>Choose summarized activities JSON</span>
       </label>
       <p id="data-status" class="status muted">No file loaded.</p>
