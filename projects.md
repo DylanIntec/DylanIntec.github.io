@@ -7,6 +7,14 @@ layout: landing
 
 # Coding Projects
 
+## LLM Text to SQL locally
+Exploring my Garmin training data fully locally using on-device LLMs. You download your Garmin data from ![here](https://www.garmin.com/en-US/account/datamanagement/) then upload summarizedActivities.json to the site. THe json is coverted into a DuckDB that runs on the browser. You can then query the database by asking questions and QWEN2.5 Coder 1.5B converts it into SQL code to run.
+
+[View My Journey](dist/index.html)
+
+![alt text](images/localLLM.png)
+
+
 ## My Journey
 An interactive scrollytelling experience that follows my journey from growing up in Tasmania to studying at the Australian Maritime College. Using modern web technologies to create an immersive story with maps and animations.
 
