@@ -8,7 +8,8 @@ layout: landing
 # Coding Projects
 
 ## LLM Text to SQL locally
-Exploring my Garmin training data fully locally using on-device LLMs. You download your Garmin data from ![here](https://www.garmin.com/en-US/account/datamanagement/) then upload summarizedActivities.json to the site. THe json is coverted into a DuckDB that runs on the browser. You can then query the database by asking questions and QWEN2.5 Coder 1.5B converts it into SQL code to run. I found that 1.5 B is a sweet spot at 900 mb. 3B was too large at 1.8 gb and 0.5B is not smart enough. The key to speed was making the system propt as small as possible. The garmin data has about 130 columns and I initially fed all these into the system prompt. This casued ~10 seconds delay just to read into the model and the model forgot them anyway. Now a simple search checks the question keywords and filters the columns accordingly.  
+Exploring my Garmin training data fully locally using on-device LLMs. You download your Garmin data from 
+[here](https://www.garmin.com/en-US/account/datamanagement/), then upload summarizedActivities.json to the site. The JSON is converted into a DuckDB that runs in the browser. You can then query the database by asking questions, and QWEN2.5 Coder 1.5B converts them into SQL to run. I found that 1.5B is a sweet spot at 900 MB. 3B was too large at 1.8 GB, and 0.5B is not smart enough. The key to speed was making the system prompt as small as possible. The Garmin data has about 130 columns, and I initially fed all of these into the system prompt. This caused ~10 seconds of delay just to read into the model, and the model forgot them anyway. Now a simple search checks the question keywords and filters the columns accordingly.
 
 [Explore Garmin Data](dist/index.html)
 
